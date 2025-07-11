@@ -1,0 +1,311 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Tabla departamentos
+model Departamento {
+  id        Int      @id @default(autoincrement()) @map("id_departamento")
+  nombre    String   @map("nombre_departamento") @db.VarChar(25)
+  createdAt DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  usuarios            Usuario[]
+  tickets             Ticket[]
+  derivacionesOrigen  DerivacionTicket[] @relation("DepartamentoOrigen")
+  derivacionesDestino DerivacionTicket[] @relation("DepartamentoDestino")
+  slaPrioridades      SlaPrioridad[]
+
+  @@map("departamentos")
+}
+
+// Tabla roles
+model Rol {
+  id        Int      @id @default(autoincrement()) @map("id_rol")
+  nombre    String   @map("nombre_rol") @db.VarChar(25)
+  permisos  Json?
+  createdAt DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  usuarios Usuario[]
+
+  @@map("roles")
+}
+
+// Tabla usuarios
+model Usuario {
+  id              Int       @id @default(autoincrement()) @map("id_usuario")
+  primerNombre    String    @map("primer_nombre") @db.VarChar(25)
+  segundoNombre   String?   @map("segundo_nombre") @db.VarChar(25)
+  primerApellido  String    @map("primer_apellido") @db.VarChar(25)
+  segundoApellido String    @map("segundo_apellido") @db.VarChar(25)
+  correo          String    @unique @db.VarChar(80)
+  hashContrasena  String    @map("hash_contrasena") @db.VarChar(100)
+  rolId           Int       @map("id_rol")
+  departamentoId  Int       @map("id_departamento")
+  esInterno       Boolean   @default(true) @map("es_interno")
+  ultimoAcceso    DateTime? @map("ultimo_acceso")
+  createdAt       DateTime  @default(now()) @map("fecha_creacion")
+  updatedAt       DateTime? @updatedAt @map("fecha_actualizacion")
+
+  // Relaciones
+  rol              Rol                    @relation(fields: [rolId], references: [id])
+  departamento     Departamento           @relation(fields: [departamentoId], references: [id])
+  ticketsCreados   Ticket[]               @relation("TicketSolicitante")
+  ticketsAsignados Ticket[]               @relation("TicketAsignado")
+  comentarios      ComentarioTicket[]
+  historial        HistorialTicket[]
+  archivosSubidos  ArchivoAdjunto[]
+  derivaciones     DerivacionTicket[]
+  encuestas        Encuesta[]
+  notificaciones   Notificacion[]
+  usuariosEnCopia  UsuarioEnCopia[]
+  configuraciones  ConfiguracionSistema[]
+
+  @@map("usuarios")
+}
+
+// Tabla estados_ticket
+model EstadoTicket {
+  id             Int      @id @default(autoincrement()) @map("id_estado")
+  nombre         String   @map("nombre_estado") @db.VarChar(25)
+  esEstadoFinal  Boolean  @default(false) @map("es_estado_final")
+  ordenSecuencia Int      @map("orden_secuencia")
+  createdAt      DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  tickets Ticket[]
+
+  @@map("estados_ticket")
+}
+
+// Tabla prioridades
+model Prioridad {
+  id        Int      @id @default(autoincrement()) @map("id_prioridad")
+  nombre    String   @map("nombre_prioridad") @db.VarChar(25)
+  nivel     Int
+  createdAt DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  tickets Ticket[]
+  slas    SlaPrioridad[]
+
+  @@map("prioridades")
+}
+
+// Tabla sla_prioridades
+model SlaPrioridad {
+  prioridadId           Int      @map("id_prioridad")
+  departamentoId        Int      @map("id_departamento")
+  tiempoRespuestaHoras  Int      @map("tiempo_respuesta_horas")
+  tiempoResolucionHoras Int      @map("tiempo_resolucion_horas")
+  createdAt             DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  prioridad    Prioridad    @relation(fields: [prioridadId], references: [id])
+  departamento Departamento @relation(fields: [departamentoId], references: [id])
+
+  @@id([prioridadId, departamentoId])
+  @@map("sla_prioridades")
+}
+
+// Tabla tickets
+model Ticket {
+  id               Int       @id @default(autoincrement()) @map("id_ticket")
+  numeroTicket     String    @unique @map("numero_ticket") @db.VarChar(25)
+  asunto           String    @db.VarChar(150)
+  descripcion      String    @db.Text
+  solicitanteId    Int       @map("id_solicitante")
+  asignadoA        Int?      @map("asignado_a")
+  departamentoId   Int       @map("id_departamento")
+  prioridadId      Int       @map("id_prioridad")
+  estadoId         Int       @map("id_estado")
+  fechaVencimiento DateTime? @map("fecha_vencimiento")
+  fechaResolucion  DateTime? @map("fecha_resolucion")
+  fechaCierre      DateTime? @map("fecha_cierre")
+  createdAt        DateTime  @default(now()) @map("fecha_creacion")
+  updatedAt        DateTime? @updatedAt @map("fecha_actualizacion")
+
+  // Relaciones
+  solicitante     Usuario            @relation("TicketSolicitante", fields: [solicitanteId], references: [id])
+  asignado        Usuario?           @relation("TicketAsignado", fields: [asignadoA], references: [id])
+  departamento    Departamento       @relation(fields: [departamentoId], references: [id])
+  prioridad       Prioridad          @relation(fields: [prioridadId], references: [id])
+  estado          EstadoTicket       @relation(fields: [estadoId], references: [id])
+  comentarios     ComentarioTicket[]
+  historial       HistorialTicket[]
+  archivos        ArchivoAdjunto[]
+  derivaciones    DerivacionTicket[]
+  encuesta        Encuesta?
+  notificaciones  Notificacion[]
+  usuariosEnCopia UsuarioEnCopia[]
+
+  @@map("tickets")
+}
+
+// Tabla historial_tickets
+model HistorialTicket {
+  id              Int      @id @default(autoincrement()) @map("id_hist_ticket")
+  ticketId        Int      @map("id_ticket")
+  usuarioId       Int      @map("id_usuario")
+  tipoAccion      String   @map("tipo_accion") @db.VarChar(30)
+  campoModificado String?  @map("campo_modificado") @db.VarChar(100)
+  valorAnterior   String?  @map("valor_anterior") @db.Text
+  valorNuevo      String?  @map("valor_nuevo") @db.Text
+  comentario      String?  @db.Text
+  createdAt       DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  ticket  Ticket  @relation(fields: [ticketId], references: [id])
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@map("historial_tickets")
+}
+
+// Tabla comentarios_tickets
+model ComentarioTicket {
+  id         Int       @id @default(autoincrement()) @map("id_comentario")
+  ticketId   Int       @map("id_ticket")
+  usuarioId  Int       @map("id_usuario")
+  comentario String    @db.Text
+  esInterno  Boolean   @default(false) @map("es_interno")
+  esSolucion Boolean   @default(false) @map("es_solucion")
+  createdAt  DateTime  @default(now()) @map("fecha_creacion")
+  updatedAt  DateTime? @updatedAt @map("fecha_actualizacion")
+
+  // Relaciones
+  ticket   Ticket           @relation(fields: [ticketId], references: [id])
+  usuario  Usuario          @relation(fields: [usuarioId], references: [id])
+  archivos ArchivoAdjunto[]
+
+  @@map("comentarios_tickets")
+}
+
+// Tabla archivos_adjuntos
+model ArchivoAdjunto {
+  id               Int      @id @default(autoincrement()) @map("id_adjunto")
+  ticketId         Int      @map("id_ticket")
+  comentarioId     Int?     @map("id_comentario")
+  nombreOriginal   String   @map("nombre_original") @db.VarChar(120)
+  nombreAlmacenado String   @map("nombre_almacenado") @db.VarChar(120)
+  rutaArchivo      String   @map("ruta_archivo") @db.VarChar(200)
+  tamanoArchivo    Int      @map("tamano_archivo")
+  tipoMime         String   @map("tipo_mime") @db.VarChar(80)
+  subidoPor        Int      @map("subido_por")
+  createdAt        DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  ticket     Ticket            @relation(fields: [ticketId], references: [id])
+  comentario ComentarioTicket? @relation(fields: [comentarioId], references: [id])
+  usuario    Usuario           @relation(fields: [subidoPor], references: [id])
+
+  @@map("archivos_adjuntos")
+}
+
+// Tabla derivaciones_tickets
+model DerivacionTicket {
+  id                    Int      @id @default(autoincrement()) @map("id_derivacion")
+  ticketId              Int      @map("id_ticket")
+  departamentoOrigenId  Int      @map("id_departamento_origen")
+  departamentoDestinoId Int      @map("id_departamento_destino")
+  motivo                String?  @db.Text
+  derivadoPor           Int      @map("derivado_por")
+  createdAt             DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  ticket              Ticket       @relation(fields: [ticketId], references: [id])
+  departamentoOrigen  Departamento @relation("DepartamentoOrigen", fields: [departamentoOrigenId], references: [id])
+  departamentoDestino Departamento @relation("DepartamentoDestino", fields: [departamentoDestinoId], references: [id])
+  usuario             Usuario      @relation(fields: [derivadoPor], references: [id])
+
+  @@map("derivaciones_tickets")
+}
+
+// Tabla encuestas
+model Encuesta {
+  id             Int       @id @default(autoincrement()) @map("id_encuesta")
+  ticketId       Int       @unique @map("id_ticket")
+  calificacion   Int?
+  comentario     String?   @db.Text
+  enviadoPor     Int?      @map("enviado_por")
+  fechaEnvio     DateTime  @default(now()) @map("fecha_envio")
+  fechaRespuesta DateTime? @map("fecha_respuesta")
+
+  // Relaciones
+  ticket  Ticket   @relation(fields: [ticketId], references: [id])
+  usuario Usuario? @relation(fields: [enviadoPor], references: [id])
+
+  @@map("encuestas")
+}
+
+// Tabla notificaciones
+model Notificacion {
+  id               Int       @id @default(autoincrement()) @map("id_notificacion")
+  usuarioId        Int       @map("id_usuario")
+  ticketId         Int?      @map("id_ticket")
+  tipo             String    @db.VarChar(50)
+  titulo           String    @db.VarChar(120)
+  mensaje          String    @db.Text
+  leido            Boolean   @default(false)
+  correoEnviado    Boolean   @default(false) @map("correo_enviado")
+  fechaEnvioCorreo DateTime? @map("fecha_envio_correo")
+  createdAt        DateTime  @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  ticket  Ticket? @relation(fields: [ticketId], references: [id])
+
+  @@map("notificaciones")
+}
+
+// Tabla usuarios_en_copia
+model UsuarioEnCopia {
+  ticketId    Int      @map("id_ticket")
+  usuarioId   Int      @map("id_usuario")
+  agregadoPor Int      @map("agregado_por")
+  createdAt   DateTime @default(now()) @map("fecha_creacion")
+
+  // Relaciones
+  ticket  Ticket  @relation(fields: [ticketId], references: [id])
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@id([ticketId, usuarioId])
+  @@map("usuarios_en_copia")
+}
+
+// Tabla configuraciones_sistema
+model ConfiguracionSistema {
+  id                 Int       @id @default(autoincrement()) @map("id_configuracion")
+  claveConfiguracion String    @unique @map("clave_configuracion") @db.VarChar(30)
+  valorConfiguracion String    @map("valor_configuracion") @db.Text
+  tipoDato           String    @map("tipo_dato") @db.VarChar(20)
+  actualizadoPor     Int       @map("actualizado_por")
+  createdAt          DateTime  @default(now()) @map("fecha_creacion")
+  updatedAt          DateTime? @updatedAt @map("fecha_actualizacion")
+
+  // Relaciones
+  usuario Usuario @relation(fields: [actualizadoPor], references: [id])
+
+  @@map("configuraciones_sistema")
+}
+
+// Recuperacion de contraseñas
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("password_reset_tokens")
+}
