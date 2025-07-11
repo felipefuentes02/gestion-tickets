@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { addIcons } from 'ionicons';
 import { 
   eye, 
@@ -26,9 +27,10 @@ export class LoginPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private toastController: ToastController
   ) {
-    // Registrar iconos
     addIcons({ 
       eye, 
       'eye-off': eyeOff, 
@@ -43,9 +45,9 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.router.navigate(['/home']);
+    // Redirigir si ya está autenticado
+    if (this.authService.isAuthenticated()) {
+      this.redirectByRole();
     }
   }
 
@@ -58,69 +60,37 @@ export class LoginPage implements OnInit {
       this.isLoading = true;
       this.errorMessage = '';
 
-      try {
-        const credentials = this.loginForm.value;
-        await this.simulateLogin(credentials);
-        this.isLoading = false;
-        
-        const userRole = this.getUserRole(credentials.correo);
-        this.redirectByRole(userRole);
+      const credentials = this.loginForm.value;
 
-      } catch (error: any) {
-        this.isLoading = false;
-        this.errorMessage = 'Credenciales incorrectas. Intenta nuevamente.';
-      }
-    } else {
-      Object.keys(this.loginForm.controls).forEach(key => {
-        this.loginForm.get(key)?.markAsTouched();
+      this.authService.login(credentials).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          this.showToast('Inicio de sesión exitoso', 'success');
+          this.redirectByRole(response.user.rol.nombre);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error.error?.message || 'Error de autenticación';
+          this.showToast(this.errorMessage, 'danger');
+        }
       });
+    } else {
+      this.markFormGroupTouched();
     }
   }
 
-  // NUEVA FUNCIÓN: Ir a recuperar contraseña
   irARecuperarContrasena() {
     this.router.navigate(['/forgot-password']);
   }
 
-  private async simulateLogin(credentials: any): Promise<void> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const validCredentials = [
-          { email: 'admin@empresa.com', password: '123456', role: 'administrador' },
-          { email: 'responsable@empresa.com', password: '123456', role: 'responsable' },
-          { email: 'cliente@empresa.com', password: '123456', role: 'cliente' }
-        ];
-
-        const user = validCredentials.find(
-          cred => cred.email === credentials.correo && cred.password === credentials.contrasena
-        );
-
-        if (user) {
-          localStorage.setItem('token', 'fake-jwt-token');
-          localStorage.setItem('user', JSON.stringify({
-            correo: user.email,
-            rol: user.role
-          }));
-          resolve();
-        } else {
-          reject(new Error('Invalid credentials'));
-        }
-      }, 1000);
-    });
-  }
-
-  private getUserRole(email: string): string {
-    if (email.includes('admin')) return 'administrador';
-    if (email.includes('responsable')) return 'responsable';
-    return 'cliente';
-  }
-
-  private redirectByRole(role: string) {
-    switch (role.toLowerCase()) {
+  private redirectByRole(role?: string) {
+    const userRole = role || this.authService.getUserRole();
+    
+    switch (userRole?.toLowerCase()) {
       case 'administrador':
         this.router.navigate(['/admin-dashboard']);
         break;
-      case 'responsable':
+      case 'responsable de respuesta':
         this.router.navigate(['/responsable-dashboard']);
         break;
       case 'cliente':
@@ -128,5 +98,21 @@ export class LoginPage implements OnInit {
         this.router.navigate(['/home']);
         break;
     }
+  }
+
+  private markFormGroupTouched() {
+    Object.keys(this.loginForm.controls).forEach(key => {
+      this.loginForm.get(key)?.markAsTouched();
+    });
+  }
+
+  private async showToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      color,
+      position: 'top'
+    });
+    toast.present();
   }
 }

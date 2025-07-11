@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 export interface LoginRequest {
   correo: string;
@@ -12,29 +13,41 @@ export interface LoginRequest {
 export interface LoginResponse {
   access_token: string;
   user: {
-    id_usuario: number;
-    primer_nombre: string;
-    segundo_nombre?: string;
-    primer_apellido: string;
-    segundo_apellido: string;
+    id: number;
+    primerNombre: string;
+    segundoNombre?: string;
+    primerApellido: string;
+    segundoApellido: string;
     correo: string;
     rol: {
-      id_rol: number;
-      nombre_rol: string;
+      id: number;
+      nombre: string;
     };
     departamento: {
-      id_departamento: number;
-      nombre_departamento: string;
+      id: number;
+      nombre: string;
     };
-    es_interno: boolean;
+    esInterno: boolean;
   };
+}
+
+export interface RegisterRequest {
+  primerNombre: string;
+  segundoNombre?: string;
+  primerApellido: string;
+  segundoApellido: string;
+  correo: string;
+  contrasena: string;
+  rolId: number;
+  departamentoId: number;
+  esInterno: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = `${environment.apiUrl}/api/auth`;
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -42,35 +55,69 @@ export class AuthService {
     private http: HttpClient,
     private router: Router
   ) {
-    // Verificar si hay un token guardado al inicializar
-    const token = localStorage.getItem('token');
+    // Verificar token al inicializar
+    this.checkStoredAuth();
+  }
+
+  private checkStoredAuth() {
+    const token = localStorage.getItem('auth_token');
     const user = localStorage.getItem('user');
     if (token && user) {
       this.currentUserSubject.next(JSON.parse(user));
+      this.validateToken().subscribe(
+        () => {}, // Token válido
+        () => this.logout() // Token inválido
+      );
     }
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials)
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
         tap(response => {
-          // Guardar token y datos del usuario
-          localStorage.setItem('token', response.access_token);
+          localStorage.setItem('auth_token', response.access_token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.currentUserSubject.next(response.user);
+        }),
+        catchError(error => {
+          console.error('Error en login:', error);
+          throw error;
+        })
+      );
+  }
+
+  register(userData: RegisterRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/register`, userData)
+      .pipe(
+        tap(response => {
+          localStorage.setItem('auth_token', response.access_token);
           localStorage.setItem('user', JSON.stringify(response.user));
           this.currentUserSubject.next(response.user);
         })
       );
   }
 
+  validateToken(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/validate`);
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+  }
+
   logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('auth_token');
   }
 
   getCurrentUser(): any {
@@ -78,6 +125,11 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('auth_token');
+  }
+
+  getUserRole(): string | null {
+    const user = this.getCurrentUser();
+    return user?.rol?.nombre || null;
   }
 }

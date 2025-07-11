@@ -63,33 +63,33 @@
             </ion-textarea>
           </ion-item>
 
-          <!-- Departamento -->
+          <!-- Departamento - CORREGIDO: usar departamentoId -->
           <ion-item>
             <ion-select 
               label="Departamento *" 
               labelPlacement="stacked"
-              [(ngModel)]="ticket.departamento"
-              name="departamento"
+              [(ngModel)]="ticket.departamentoId"
+              name="departamentoId"
               placeholder="Selecciona un departamento"
               required>
               <ion-select-option 
                 *ngFor="let dept of departamentos" 
-                [value]="dept.nombre">
+                [value]="dept.id">
                 {{ dept.nombre }}
               </ion-select-option>
             </ion-select>
           </ion-item>
 
-          <!-- Prioridad -->
+          <!-- Prioridad - CORREGIDO: usar prioridadId -->
           <ion-item>
             <ion-select 
               label="Prioridad" 
               labelPlacement="stacked"
-              [(ngModel)]="ticket.prioridad"
-              name="prioridad">
+              [(ngModel)]="ticket.prioridadId"
+              name="prioridadId">
               <ion-select-option 
                 *ngFor="let prioridad of prioridades" 
-                [value]="prioridad.valor">
+                [value]="prioridad.id">
                 {{ prioridad.nombre }}
               </ion-select-option>
             </ion-select>
