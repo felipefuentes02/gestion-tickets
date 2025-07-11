@@ -1,0 +1,179 @@
+@import "@ionic/angular/css/core.css";  
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+:root {
+  --color-fondo: #FFFFFF;
+  --color-contraste: #1763B8;
+  --color-boton: #1763B8;
+  --color-boton-hover: #144A85;
+  --color-texto-primario: #000000;
+  --color-texto-secundario: #000000;
+  --font-family-sans: Arial, sans-serif;
+}
+
+body {
+  background-color: var(--color-fondo);
+  color: var(--color-texto-primario);
+  font-family: var(--font-family-sans);
+}
+
+ion-app {
+  background-color: var(--color-fondo);
+}
+
+ion-content {
+  --background: var(--color-fondo);
+  --color: var(--color-texto-primario);
+}
+
+ion-item {
+  --background: var(--color-fondo);
+  --color: var(--color-texto-primario);
+}
+
+ion-label {
+  color: var(--color-texto-primario);
+}
+
+ion-text {
+  color: var(--color-texto-primario);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-texto-primario);
+  font-family: var(--font-family-sans);
+}
+
+p {
+  color: var(--color-texto-primario);
+  font-family: var(--font-family-sans);
+}
+
+* {
+  font-family: var(--font-family-sans);
+}
+
+ion-button {
+  --background: var(--color-boton);
+  --background-hover: var(--color-boton-hover);
+  --color: var(--color-fondo);
+  transition: all 0.3s ease;
+  font-family: var(--font-family-sans);
+}
+
+ion-button:hover {
+  --background: var(--color-boton-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(23, 99, 184, 0.3);
+}
+
+ion-button[fill="outline"] {
+  --border-color: var(--color-boton);
+  --color: var(--color-boton);
+  --background: var(--color-fondo);
+}
+
+ion-button[fill="outline"]:hover {
+  --background: var(--color-boton);
+  --color: var(--color-fondo);
+  --border-color: var(--color-boton-hover);
+}
+
+ion-button[fill="clear"] {
+  --color: var(--color-boton);
+  --background: transparent;
+}
+
+ion-button[fill="clear"]:hover {
+  --background: rgba(23, 99, 184, 0.1);
+}
+
+.text-contrast {
+  color: var(--color-contraste);
+}
+
+.bg-contrast {
+  background-color: var(--color-contraste);
+  color: var(--color-fondo);
+}
+
+ion-header ion-toolbar {
+  --background: var(--color-fondo);
+  --color: var(--color-contraste);
+  --border-color: var(--color-contraste);
+}
+
+ion-title {
+  color: var(--color-contraste);
+  font-weight: 600;
+}
+
+ion-tab-bar {
+  --background: var(--color-fondo);
+  --color: var(--color-texto-primario);
+  --color-selected: var(--color-boton);
+  border-top: 1px solid var(--color-contraste);
+}
+
+ion-tab-button {
+  --color: var(--color-texto-primario);
+  --color-selected: var(--color-boton);
+}
+
+a {
+  color: var(--color-boton);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-boton-hover);
+}
+
+ion-input {
+  --color: var(--color-texto-primario);
+  --background: var(--color-fondo);
+  --border-color: var(--color-contraste);
+}
+
+ion-input:focus {
+  --border-color: var(--color-boton);
+}
+
+ion-card {
+  --background: var(--color-fondo);
+  --color: var(--color-texto-primario);
+  border: 1px solid rgba(23, 99, 184, 0.1);
+  box-shadow: 0 2px 8px rgba(23, 99, 184, 0.1);
+}
+
+.logo-empresa {
+  height: 32px;
+  width: auto;
+  max-width: 120px;
+}
+
+.user-menu-button {
+  --color: var(--color-contraste);
+  font-size: 14px;
+  
+  ion-icon {
+    margin: 0 4px;
+  }
+}
+
+.user-menu-button:hover {
+  --color: var(--color-boton);
+  transition: all 0.3s ease;
+}

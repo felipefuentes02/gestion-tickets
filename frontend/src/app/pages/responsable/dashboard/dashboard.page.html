@@ -1,0 +1,110 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Logo de la empresa -->
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/responsable-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Dashboard Responsable</ion-title>
+    
+    <!-- Menú de usuario -->
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="dashboard-container">
+    
+    <!-- Tarjetas de métricas -->
+    <div class="metricas-grid">
+      <ion-card class="metrica-card">
+        <ion-card-content>
+          <div class="metrica-content">
+            <ion-icon name="folder-open" color="primary"></ion-icon>
+            <div class="metrica-info">
+              <h2>{{ metricas.ticketsAbiertos }}</h2>
+              <p>Solicitudes Abiertas</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="metrica-card">
+        <ion-card-content>
+          <div class="metrica-content">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <div class="metrica-info">
+              <h2>{{ metricas.ticketsCerrados }}</h2>
+              <p>Solicitudes Cerradas</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="metrica-card">
+        <ion-card-content>
+          <div class="metrica-content">
+            <ion-icon name="time" color="warning"></ion-icon>
+            <div class="metrica-info">
+              <h2>{{ metricas.ticketsPendientes }}</h2>
+              <p>Solicitudes Pendientes</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="metrica-card">
+        <ion-card-content>
+          <div class="metrica-content">
+            <ion-icon name="speedometer" color="secondary"></ion-icon>
+            <div class="metrica-info">
+              <h2>{{ metricas.tiempoPromedioRespuesta }}</h2>
+              <p>Tiempo Promedio</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Botones de navegación -->
+    <div class="navegacion-section">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Gestión de Solicitudes</ion-card-title>
+          <ion-card-subtitle>Accede a las diferentes secciones</ion-card-subtitle>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <ion-button expand="block" fill="solid" color="primary" routerLink="/solicitudes-abiertas">
+            <ion-icon name="folder-open" slot="start"></ion-icon>
+            Solicitudes Abiertas
+          </ion-button>
+          
+          <ion-button expand="block" fill="outline" color="success" routerLink="/solicitudes-cerradas">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Solicitudes Cerradas
+          </ion-button>
+          
+          <ion-button expand="block" fill="outline" color="warning" routerLink="/solicitudes-pendientes">
+            <ion-icon name="time" slot="start"></ion-icon>
+            Solicitudes Pendientes
+          </ion-button>
+          
+          <ion-button expand="block" fill="outline" color="secondary" routerLink="/metricas">
+            <ion-icon name="analytics" slot="start"></ion-icon>
+            Métricas Detalladas
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

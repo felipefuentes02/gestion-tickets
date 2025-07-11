@@ -1,0 +1,324 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/admin-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Reportes Administrativos</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+
+    <!-- Sección de Filtros -->
+    <div class="filtros-section">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Filtros del Reporte</ion-card-title>
+          <ion-card-subtitle>Selecciona los criterios para generar el reporte</ion-card-subtitle>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="filtros-grid">
+            <!-- Tipo de Reporte -->
+            <ion-item>
+              <ion-select 
+                label="Tipo de Reporte *" 
+                labelPlacement="stacked"
+                [(ngModel)]="filtros.tipoReporte">
+                <ion-select-option *ngFor="let tipo of tiposReporte" [value]="tipo.id">
+                  {{ tipo.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <!-- Rango de Fechas -->
+            <ion-item>
+              <ion-label position="stacked">Fecha Inicio *</ion-label>
+              <ion-input 
+                type="date" 
+                [(ngModel)]="filtros.fechaInicio">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="stacked">Fecha Fin *</ion-label>
+              <ion-input 
+                type="date" 
+                [(ngModel)]="filtros.fechaFin">
+              </ion-input>
+            </ion-item>
+
+            <!-- Filtros adicionales -->
+            <ion-item>
+              <ion-select 
+                label="Departamento" 
+                labelPlacement="stacked"
+                [(ngModel)]="filtros.departamento">
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option *ngFor="let dept of departamentos" [value]="dept">
+                  {{ dept }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select 
+                label="Prioridad" 
+                labelPlacement="stacked"
+                [(ngModel)]="filtros.prioridad">
+                <ion-select-option value="">Todas</ion-select-option>
+                <ion-select-option *ngFor="let prio of prioridades" [value]="prio">
+                  {{ prio }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select 
+                label="Estado" 
+                labelPlacement="stacked"
+                [(ngModel)]="filtros.estado">
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option *ngFor="let est of estados" [value]="est">
+                  {{ est }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="acciones-filtros">
+            <ion-button expand="block" color="primary" (click)="generarReporte()">
+              <ion-icon name="document-text" slot="start"></ion-icon>
+              Generar Reporte
+            </ion-button>
+            
+            <ion-button expand="block" fill="outline" color="medium" (click)="limpiarFiltros()">
+              <ion-icon name="refresh" slot="start"></ion-icon>
+              Limpiar Filtros
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Sección de Resultados -->
+    <div *ngIf="reporteGenerado" class="resultados-section">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            Reporte: {{ nombreTipoReporte }}
+          </ion-card-title>
+          <ion-card-subtitle>
+            Generado el {{ reporteGenerado.fechaGeneracion | date:'medium' }} | 
+            Rango: {{ reporteGenerado.rangoFechas }}
+          </ion-card-subtitle>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <!-- Reporte General -->
+          <div *ngIf="reporteGenerado.tipo === 'general'" class="reporte-general">
+            <div class="metricas-principales">
+              <div class="metrica">
+                <h3>{{ reporteGenerado.datos.totalTickets }}</h3>
+                <p>Total Tickets</p>
+              </div>
+              <div class="metrica">
+                <h3>{{ reporteGenerado.datos.ticketsAbiertos }}</h3>
+                <p>Abiertos</p>
+              </div>
+              <div class="metrica">
+                <h3>{{ reporteGenerado.datos.ticketsCerrados }}</h3>
+                <p>Cerrados</p>
+              </div>
+              <div class="metrica">
+                <h3>{{ reporteGenerado.datos.ticketsVencidos }}</h3>
+                <p>Vencidos</p>
+              </div>
+              <div class="metrica">
+                <h3>{{ reporteGenerado.datos.tiempoPromedioResolucion }}</h3>
+                <p>Tiempo Promedio</p>
+              </div>
+            </div>
+
+            <div class="distribucion-departamentos">
+              <h4>Distribución por Departamento</h4>
+              <div class="departamentos-list">
+                <div *ngFor="let dept of reporteGenerado.datos.departamentos" class="departamento-item">
+                  <div class="dept-info">
+                    <span class="dept-nombre">{{ dept.nombre }}</span>
+                    <span class="dept-cantidad">{{ dept.cantidad }} ({{ dept.porcentaje }}%)</span>
+                  </div>
+                  <div class="dept-bar">
+                    <div class="barra" [style.width.%]="dept.porcentaje"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reporte SLA -->
+          <div *ngIf="reporteGenerado.tipo === 'sla'" class="reporte-sla">
+            <div class="sla-global">
+              <h4>Cumplimiento SLA Global</h4>
+              <div class="sla-circular" [style.background]="'conic-gradient(#28a745 0deg ' + (reporteGenerado.datos.cumplimientoGlobal * 3.6) + 'deg, #f8f9fa ' + (reporteGenerado.datos.cumplimientoGlobal * 3.6) + 'deg 360deg)'">
+                <div class="sla-centro">
+                  <span>{{ reporteGenerado.datos.cumplimientoGlobal }}%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="sla-detalle">
+              <h4>Por Departamento</h4>
+              <div class="sla-departamentos">
+                <div *ngFor="let dept of reporteGenerado.datos.cumplimientoPorDepartamento" class="sla-dept-item">
+                  <div class="dept-info">
+                    <span>{{ dept.departamento }}</span>
+                    <span>{{ dept.tickets }} tickets</span>
+                  </div>
+                  <div class="sla-bar">
+                    <div class="barra" [style.width.%]="dept.cumplimiento"></div>
+                    <span>{{ dept.cumplimiento }}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="reporteGenerado.datos.ticketsFueraSLA.length > 0" class="tickets-fuera-sla">
+              <h4>Tickets Fuera de SLA</h4>
+              <ion-list>
+                <ion-item *ngFor="let ticket of reporteGenerado.datos.ticketsFueraSLA">
+                  <ion-label>
+                    <h3>{{ ticket.id }} - {{ ticket.asunto }}</h3>
+                    <p>{{ ticket.departamento }} | Excedido: {{ ticket.tiempoExcedido }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+
+          <!-- Reporte Técnicos -->
+          <div *ngIf="reporteGenerado.tipo === 'tecnicos'" class="reporte-tecnicos">
+            <h4>Top Técnicos</h4>
+            <div class="tecnicos-podium">
+              <div *ngFor="let tecnico of reporteGenerado.datos.topTecnicos" class="tecnico-card">
+                <div class="tecnico-info">
+                  <h3>{{ tecnico.nombre }}</h3>
+                  <div class="tecnico-stats">
+                    <span>{{ tecnico.ticketsResueltos }} tickets</span>
+                    <span>{{ tecnico.tiempoPromedio }} promedio</span>
+                  </div>
+                  <div class="tecnico-satisfaccion">
+                    <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                              [name]="star <= tecnico.satisfaccion ? 'star' : 'star-outline'"
+                              color="warning">
+                    </ion-icon>
+                    <span>{{ tecnico.satisfaccion }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="metricas-globales">
+              <h4>Métricas Globales</h4>
+              <div class="metricas-grid">
+                <div class="metrica">
+                  <h3>{{ reporteGenerado.datos.metricasGlobales.promedioTicketsPorTecnico }}</h3>
+                  <p>Tickets por técnico</p>
+                </div>
+                <div class="metrica">
+                  <h3>{{ reporteGenerado.datos.metricasGlobales.promedioTiempoResolucion }}</h3>
+                  <p>Tiempo promedio</p>
+                </div>
+                <div class="metrica">
+                  <h3>{{ reporteGenerado.datos.metricasGlobales.promedioSatisfaccion }}</h3>
+                  <p>Satisfacción promedio</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reporte Clientes -->
+          <div *ngIf="reporteGenerado.tipo === 'clientes'" class="reporte-clientes">
+            <div class="satisfaccion-global">
+              <h4>Satisfacción Global</h4>
+              <div class="satisfaccion-estrellas">
+                <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                          [name]="star <= reporteGenerado.datos.satisfaccionGlobal ? 'star' : 'star-outline'"
+                          [color]="star <= reporteGenerado.datos.satisfaccionGlobal ? 'warning' : 'medium'">
+                </ion-icon>
+                <span>{{ reporteGenerado.datos.satisfaccionGlobal }}/5</span>
+              </div>
+            </div>
+
+            <div class="satisfaccion-departamentos">
+              <h4>Por Departamento</h4>
+              <div class="satisfaccion-barras">
+                <div *ngFor="let dept of reporteGenerado.datos.satisfaccionPorDepartamento" class="satisfaccion-bar">
+                  <span class="dept-nombre">{{ dept.departamento }}</span>
+                  <div class="barra-container">
+                    <div class="barra" [style.width.%]="dept.satisfaccion * 20"></div>
+                    <span>{{ dept.satisfaccion }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="reporteGenerado.datos.comentariosDestacados.length > 0" class="comentarios-destacados">
+              <h4>Comentarios Destacados</h4>
+              <ion-list>
+                <ion-item *ngFor="let comentario of reporteGenerado.datos.comentariosDestacados">
+                  <ion-avatar slot="start">
+                    <ion-icon name="person" size="large"></ion-icon>
+                  </ion-avatar>
+                  <ion-label>
+                    <h3>{{ comentario.cliente }}</h3>
+                    <p>{{ comentario.comentario }}</p>
+                    <div class="comentario-calificacion">
+                      <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                                [name]="star <= comentario.calificacion ? 'star' : 'star-outline'"
+                                color="warning">
+                      </ion-icon>
+                    </div>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+
+          <!-- Botón de descarga -->
+          <div class="descargar-reporte">
+            <ion-button expand="block" color="success" (click)="descargarReporte()">
+              <ion-icon name="download" slot="start"></ion-icon>
+              Descargar Reporte
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Mensaje cuando no hay reporte -->
+    <div *ngIf="!reporteGenerado" class="no-reporte">
+      <ion-card>
+        <ion-card-content class="text-center">
+          <ion-icon name="document-text" size="large" color="medium"></ion-icon>
+          <h3>No hay reporte generado</h3>
+          <p>Configura los filtros y genera un reporte para visualizar los datos</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

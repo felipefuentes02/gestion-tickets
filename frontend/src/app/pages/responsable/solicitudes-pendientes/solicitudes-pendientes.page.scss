@@ -1,0 +1,162 @@
+.container {
+  padding: 16px;
+}
+
+.alert-card {
+  margin-bottom: 16px;
+  
+  .alert-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    
+    ion-icon {
+      color: white;
+      min-width: 40px;
+    }
+    
+    h3 {
+      margin: 0 0 4px 0;
+      color: white;
+      font-weight: bold;
+    }
+    
+    p {
+      margin: 0;
+      color: white;
+      opacity: 0.9;
+    }
+  }
+}
+
+.resultados-info {
+  margin: 8px 0 16px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.solicitudes-list {
+  .solicitud-card {
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-left: 4px solid var(--ion-color-danger);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    &.vencida {
+      background: linear-gradient(90deg, rgba(var(--ion-color-danger-rgb), 0.05) 0%, transparent 100%);
+    }
+  }
+}
+
+.card-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  
+  .ticket-info {
+    flex: 1;
+    
+    ion-card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--ion-color-primary);
+    }
+    
+    ion-card-subtitle {
+      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .badges {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+  }
+}
+
+.solicitud-details {
+  margin: 12px 0;
+  
+  .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    
+    ion-icon {
+      min-width: 16px;
+    }
+    
+    &.vencimiento-row {
+      .tiempo-vencido {
+        color: var(--ion-color-danger);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.acciones {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.no-results {
+  margin-top: 40px;
+  
+  .text-center {
+    text-align: center;
+    
+    ion-icon {
+      margin-bottom: 16px;
+    }
+    
+    h3 {
+      color: var(--ion-color-success);
+      margin: 16px 0 8px 0;
+    }
+    
+    p {
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .card-header-content {
+    flex-direction: column;
+    gap: 12px;
+    
+    .badges {
+      align-items: flex-start;
+      flex-direction: row;
+    }
+  }
+  
+  .acciones {
+    flex-direction: column;
+    gap: 8px;
+    
+    ion-button {
+      margin: 0;
+    }
+  }
+  
+  .alert-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+}

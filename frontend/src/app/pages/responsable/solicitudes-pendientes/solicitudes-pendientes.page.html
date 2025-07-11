@@ -1,0 +1,130 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Logo de la empresa -->
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/responsable-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Solicitudes Pendientes</ion-title>
+    
+    <!-- Menú de usuario -->
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    
+    <!-- Alerta de solicitudes vencidas -->
+    <ion-card color="danger" class="alert-card">
+      <ion-card-content>
+        <div class="alert-content">
+          <ion-icon name="warning" size="large"></ion-icon>
+          <div>
+            <h3>¡Atención!</h3>
+            <p>Tienes {{ filteredSolicitudes.length }} solicitudes que han vencido el plazo de respuesta</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Barra de búsqueda -->
+    <ion-searchbar 
+      [(ngModel)]="searchTerm" 
+      (ionInput)="filtrarSolicitudes()" 
+      placeholder="Buscar por número, asunto, solicitante o departamento..."
+      show-clear-button="focus">
+    </ion-searchbar>
+
+    <!-- Contador de resultados -->
+    <div class="resultados-info">
+      <ion-chip color="danger">
+        <ion-icon name="alert-circle"></ion-icon>
+        <ion-label>{{ filteredSolicitudes.length }} solicitudes vencidas</ion-label>
+      </ion-chip>
+    </div>
+
+    <!-- Lista de solicitudes -->
+    <div class="solicitudes-list">
+      <ion-card *ngFor="let solicitud of filteredSolicitudes" (click)="verDetalle(solicitud)" class="solicitud-card vencida">
+        <ion-card-header>
+          <div class="card-header-content">
+            <div class="ticket-info">
+              <ion-card-title>{{ solicitud.numero }}</ion-card-title>
+              <ion-card-subtitle>{{ solicitud.asunto }}</ion-card-subtitle>
+            </div>
+            <div class="badges">
+              <ion-chip [color]="getPrioridadColor(solicitud.prioridad)">
+                <ion-label>{{ solicitud.prioridad }}</ion-label>
+              </ion-chip>
+              <ion-chip color="danger">
+                <ion-icon name="alert-circle"></ion-icon>
+                <ion-label>Vencido</ion-label>
+              </ion-chip>
+            </div>
+          </div>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="solicitud-details">
+            <div class="detail-row">
+              <ion-icon name="person" color="medium"></ion-icon>
+              <span><strong>Solicitante:</strong> {{ solicitud.solicitante }}</span>
+            </div>
+            
+            <div class="detail-row">
+              <ion-icon name="business" color="medium"></ion-icon>
+              <span><strong>Departamento:</strong> {{ solicitud.departamento }}</span>
+            </div>
+            
+            <div class="detail-row">
+              <ion-icon name="calendar" color="medium"></ion-icon>
+              <span><strong>Creado:</strong> {{ solicitud.fechaCreacion }}</span>
+            </div>
+            
+            <div class="detail-row">
+              <ion-icon name="calendar-outline" color="danger"></ion-icon>
+              <span><strong>Vencimiento:</strong> {{ solicitud.fechaVencimiento }}</span>
+            </div>
+            
+            <div class="detail-row vencimiento-row">
+              <ion-icon [name]="getVencimientoIcon(solicitud.diasVencido)" [color]="getVencimientoColor(solicitud.diasVencido)"></ion-icon>
+              <span class="tiempo-vencido"><strong>Vencido hace:</strong> {{ solicitud.tiempoVencido }}</span>
+            </div>
+          </div>
+          
+          <div class="acciones">
+            <ion-button fill="solid" size="small" color="danger" (click)="marcarComoUrgente(solicitud, $event)">
+              <ion-icon name="flash" slot="start"></ion-icon>
+              Urgente
+            </ion-button>
+            <ion-button fill="clear" size="small" (click)="verDetalle(solicitud); $event.stopPropagation()">
+              <ion-icon name="eye" slot="start"></ion-icon>
+              Ver Detalle
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Mensaje cuando no hay resultados -->
+    <div *ngIf="filteredSolicitudes.length === 0" class="no-results">
+      <ion-card>
+        <ion-card-content class="text-center">
+          <ion-icon name="checkmark-circle" size="large" color="success"></ion-icon>
+          <h3>¡Excelente trabajo!</h3>
+          <p>No tienes solicitudes pendientes por atender.</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

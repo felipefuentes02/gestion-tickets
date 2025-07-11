@@ -1,0 +1,148 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/admin-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Configuraciones del Sistema</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        Juan Pérez
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="header-section">
+      <h1>Configuraciones del Sistema</h1>
+      <p>Administra los parámetros globales del sistema de tickets</p>
+    </div>
+
+    <!-- Sección SLA -->
+    <ion-card class="config-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="settings" color="primary"></ion-icon>
+          Gestión de SLA por Departamento
+        </ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <div class="sla-list">
+          <h3>SLA Configurados</h3>
+          <div *ngFor="let sla of slaData" class="sla-item">
+            <div class="sla-info">
+              <h4>{{ sla.departamento }}</h4>
+              <p>Respuesta: {{ sla.tiempoRespuesta }}h | Resolución: {{ sla.tiempoResolucion }}h</p>
+            </div>
+            <div class="sla-actions">
+              <ion-button fill="clear" size="small" (click)="editarSLA(sla)">
+                <ion-icon name="create"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="eliminarSLA(sla.id)">
+                <ion-icon name="trash"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <form [formGroup]="slaForm" (ngSubmit)="guardarSLA()" class="sla-form">
+          <h3>Configurar SLA</h3>
+          
+          <ion-item>
+            <ion-select 
+              label="Departamento" 
+              labelPlacement="stacked"
+              formControlName="departamento"
+              placeholder="Selecciona departamento">
+              <ion-select-option value="Informática">Informática</ion-select-option>
+              <ion-select-option value="Administración">Administración</ion-select-option>
+              <ion-select-option value="Comercial">Comercial</ion-select-option>
+              <ion-select-option value="Operaciones">Operaciones</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-input 
+              label="Tiempo de Respuesta (horas)" 
+              labelPlacement="stacked"
+              type="number" 
+              formControlName="tiempoRespuesta"
+              placeholder="Ej: 4">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input 
+              label="Tiempo de Resolución (horas)" 
+              labelPlacement="stacked"
+              type="number" 
+              formControlName="tiempoResolucion"
+              placeholder="Ej: 24">
+            </ion-input>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" [disabled]="slaForm.invalid">
+            <ion-icon name="save" slot="start"></ion-icon>
+            Guardar SLA
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Sección Adjuntos -->
+    <ion-card class="config-card">
+      <ion-card-header>
+        <ion-card-title>Configuración de Adjuntos</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <form [formGroup]="adjuntosForm" (ngSubmit)="guardarAdjuntos()">
+          <ion-item>
+            <ion-input 
+              label="Máximo de archivos por solicitud" 
+              labelPlacement="stacked"
+              type="number" 
+              formControlName="maxArchivos"
+              min="1" 
+              max="20">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input 
+              label="Tamaño máximo por archivo (MB)" 
+              labelPlacement="stacked"
+              type="number" 
+              formControlName="maxTamanoMB"
+              min="1" 
+              max="100">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-textarea 
+              label="Tipos de archivos permitidos" 
+              labelPlacement="stacked"
+              formControlName="tiposPermitidos"
+              placeholder="pdf, doc, docx, jpg, png, txt"
+              rows="3">
+            </ion-textarea>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" [disabled]="adjuntosForm.invalid">
+            <ion-icon name="save" slot="start"></ion-icon>
+            Guardar Configuración
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

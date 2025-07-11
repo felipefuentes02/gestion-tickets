@@ -1,0 +1,208 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/admin-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Dashboard Administrativo</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    
+    <!-- Header administrativo -->
+    <div class="admin-header">
+      <ion-card color="dark">
+        <ion-card-content>
+          <div class="header-content">
+            <ion-icon name="shield-checkmark" size="large"></ion-icon>
+            <div>
+              <h2>Panel de Administración</h2>
+              <p>Gestión completa del sistema de tickets</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Navegación rápida -->
+    <div class="navegacion-rapida">
+      <ion-button expand="block" fill="outline" routerLink="/gestion-usuarios">
+        <ion-icon name="people" slot="start"></ion-icon>
+        Gestión de Usuarios
+      </ion-button>
+      <ion-button expand="block" fill="outline" routerLink="/reportes">
+        <ion-icon name="bar-chart" slot="start"></ion-icon>
+        Reportes Avanzados
+      </ion-button>
+      <ion-button expand="block" fill="outline" routerLink="/configuraciones">
+        <ion-icon name="settings" slot="start"></ion-icon>
+        Configuraciones del Sistema
+      </ion-button>
+    </div>
+
+    <!-- Métricas generales -->
+    <div class="seccion">
+      <h2>Resumen General de la Empresa</h2>
+      <div class="metricas-grid">
+        <ion-card class="metrica-card">
+          <ion-card-content>
+            <div class="metrica-content">
+              <ion-icon name="documents" color="primary"></ion-icon>
+              <div class="metrica-info">
+                <h3>{{ metricas.totalTickets }}</h3>
+                <p>Total Tickets</p>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="metrica-card">
+          <ion-card-content>
+            <div class="metrica-content">
+              <ion-icon name="people" color="secondary"></ion-icon>
+              <div class="metrica-info">
+                <h3>{{ metricas.totalUsuarios }}</h3>
+                <p>Usuarios Activos</p>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="metrica-card">
+          <ion-card-content>
+            <div class="metrica-content">
+              <ion-icon name="business" color="tertiary"></ion-icon>
+              <div class="metrica-info">
+                <h3>{{ metricas.totalDepartamentos }}</h3>
+                <p>Departamentos</p>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="metrica-card">
+          <ion-card-content>
+            <div class="metrica-content">
+              <ion-icon name="speedometer" color="warning"></ion-icon>
+              <div class="metrica-info">
+                <h3>{{ metricas.porcentajeCumplimientoSLA }}%</h3>
+                <p>SLA Global</p>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Estado global de tickets -->
+    <div class="seccion">
+      <h2>Estado Global de Tickets</h2>
+      <div class="estado-global">
+        <ion-card class="estado-card abiertos">
+          <ion-card-content>
+            <div class="estado-content">
+              <div class="numero">{{ metricas.ticketsAbiertos }}</div>
+              <div class="label">Abiertos</div>
+              <div class="porcentaje">{{ ((metricas.ticketsAbiertos / metricas.totalTickets) * 100).toFixed(0) }}%</div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="estado-card cerrados">
+          <ion-card-content>
+            <div class="estado-content">
+              <div class="numero">{{ metricas.ticketsCerrados }}</div>
+              <div class="label">Cerrados</div>
+              <div class="porcentaje">{{ ((metricas.ticketsCerrados / metricas.totalTickets) * 100).toFixed(0) }}%</div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="estado-card vencidos">
+          <ion-card-content>
+            <div class="estado-content">
+              <div class="numero">{{ metricas.ticketsVencidos }}</div>
+              <div class="label">Vencidos</div>
+              <div class="porcentaje">{{ ((metricas.ticketsVencidos / metricas.totalTickets) * 100).toFixed(0) }}%</div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Rendimiento por departamento -->
+    <div class="seccion">
+      <h2>Rendimiento por Departamento</h2>
+      <div class="departamentos-grid">
+        <ion-card *ngFor="let dept of departamentos" class="departamento-card" [class]="getDepartamentoEstado(dept)">
+          <ion-card-header>
+            <div class="dept-header">
+              <ion-card-title>{{ dept.nombre }}</ion-card-title>
+              <ion-chip [color]="getSLAColor(dept.sla)">
+                <ion-label>SLA: {{ dept.sla }}%</ion-label>
+              </ion-chip>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="dept-stats">
+              <div class="stat-row">
+                <span class="stat-label">Total:</span>
+                <span class="stat-value">{{ dept.tickets }}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Abiertos:</span>
+                <span class="stat-value" [style.color]="dept.abiertos > 10 ? 'var(--ion-color-warning)' : 'var(--ion-color-success)'">{{ dept.abiertos }}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Cerrados:</span>
+                <span class="stat-value success">{{ dept.cerrados }}</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Vencidos:</span>
+                <span class="stat-value" [style.color]="dept.vencidos > 3 ? 'var(--ion-color-danger)' : 'var(--ion-color-medium)'">{{ dept.vencidos }}</span>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Actividad reciente -->
+    <div class="seccion">
+      <h2>Actividad Reciente del Sistema</h2>
+      <ion-card>
+        <ion-card-content>
+          <div class="actividad-list">
+            <div *ngFor="let actividad of actividadReciente" class="actividad-item">
+              <div class="actividad-icon">
+                <ion-icon [name]="actividad.icono" [color]="actividad.color"></ion-icon>
+              </div>
+              <div class="actividad-info">
+                <div class="actividad-accion">{{ actividad.accion }}</div>
+                <div class="actividad-usuario">por {{ actividad.usuario }}</div>
+              </div>
+              <div class="actividad-tiempo">
+                <ion-chip color="light">
+                  <ion-label>{{ actividad.tiempo }}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,158 @@
+.login-content {
+  --background: #FFFFFF;
+  
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: #FFFFFF;
+  }
+
+  .logo-container {
+    margin-bottom: 30px;
+    
+    .company-logo {
+      width: 120px;
+      height: auto;
+      max-width: 200px;
+    }
+  }
+
+  .title-container {
+    text-align: center;
+    margin-bottom: 40px;
+    
+    h1 {
+      color: #1763B8;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-shadow: none;
+    }
+    
+    p {
+      color: #666;
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(23, 99, 184, 0.1);
+    border: 1px solid #E0E0E0;
+
+    .login-item {
+      margin-bottom: 20px;
+      --background: transparent;
+      --border-color: #e0e0e0;
+      --border-radius: 8px;
+      
+      ion-label {
+        color: #333;
+        font-weight: 500;
+      }
+      
+      ion-input {
+        --color: #333;
+        --placeholder-color: #999;
+      }
+      
+      &.ion-invalid {
+        --border-color: #ff6b6b;
+      }
+    }
+
+    .password-toggle {
+      --color: #666;
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      font-size: 12px;
+      margin-top: -15px;
+      margin-bottom: 15px;
+      padding-left: 16px;
+      
+      &.general-error {
+        background: rgba(255, 107, 107, 0.1);
+        border: 1px solid rgba(255, 107, 107, 0.3);
+        border-radius: 8px;
+        padding: 12px;
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        ion-icon {
+          font-size: 18px;
+        }
+      }
+    }
+
+    .login-button {
+      margin-top: 20px;
+      --background: #1C69BA;
+      --border-radius: 8px;
+      height: 48px;
+      font-weight: 600;
+      
+      &:hover {
+        --background: #1763B8;
+      }
+      
+      &[disabled] {
+        --background: #ccc;
+      }
+    }
+  }
+
+  .forgot-password-section {
+    margin-top: 16px;
+    text-align: center;
+    
+    .forgot-password-link {
+      --color: #1763B8;
+      font-size: 14px;
+      
+      &:hover {
+        --color: #1C69BA;
+      }
+    }
+  }
+
+  .footer {
+    margin-top: 30px;
+    text-align: center;
+    
+    p {
+      color: #666;
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .login-content {
+    .login-container {
+      padding: 15px;
+    }
+    
+    .title-container h1 {
+      font-size: 24px;
+    }
+    
+    .login-form {
+      padding: 20px;
+    }
+  }
+}

@@ -1,0 +1,369 @@
+.container {
+  padding: 16px;
+}
+
+.filtros-section {
+  margin-bottom: 24px;
+  
+  .filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .acciones-filtros {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    
+    ion-button {
+      flex: 1;
+    }
+  }
+}
+
+.resultados-section {
+  margin-top: 24px;
+  
+  .reporte-general {
+    .metricas-principales {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      
+      .metrica {
+        background: var(--ion-color-light);
+        border-radius: 8px;
+        padding: 16px;
+        text-align: center;
+        
+        h3 {
+          margin: 0;
+          font-size: 1.8rem;
+          color: var(--ion-color-primary);
+        }
+        
+        p {
+          margin: 4px 0 0 0;
+          color: var(--ion-color-medium);
+          font-size: 0.9rem;
+        }
+      }
+    }
+    
+    .distribucion-departamentos {
+      margin-top: 24px;
+      
+      .departamentos-list {
+        .departamento-item {
+          margin-bottom: 12px;
+          
+          .dept-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            
+            .dept-nombre {
+              font-weight: 500;
+            }
+            
+            .dept-cantidad {
+              color: var(--ion-color-medium);
+            }
+          }
+          
+          .dept-bar {
+            height: 8px;
+            background: var(--ion-color-light);
+            border-radius: 4px;
+            overflow: hidden;
+            
+            .barra {
+              height: 100%;
+              background: var(--ion-color-primary);
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .reporte-sla {
+    .sla-global {
+      text-align: center;
+      margin-bottom: 24px;
+      
+      .sla-circular {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 16px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        .sla-centro {
+          width: 80px;
+          height: 80px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 1.2rem;
+        }
+      }
+    }
+    
+    .sla-detalle {
+      .sla-departamentos {
+        .sla-dept-item {
+          margin-bottom: 12px;
+          
+          .dept-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+          }
+          
+          .sla-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            
+            .barra {
+              flex: 1;
+              height: 8px;
+              background: var(--ion-color-light);
+              border-radius: 4px;
+              overflow: hidden;
+              
+              div {
+                height: 100%;
+                background: var(--ion-color-success);
+              }
+            }
+            
+            span {
+              font-size: 0.9rem;
+              color: var(--ion-color-medium);
+            }
+          }
+        }
+      }
+    }
+    
+    .tickets-fuera-sla {
+      margin-top: 24px;
+      
+      ion-list {
+        background: transparent;
+      }
+      
+      ion-item {
+        --background: rgba(var(--ion-color-danger-rgb), 0.1);
+        margin-bottom: 8px;
+        border-radius: 8px;
+      }
+    }
+  }
+  
+  .reporte-tecnicos {
+    .tecnicos-podium {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+      
+      .tecnico-card {
+        background: var(--ion-color-light);
+        border-radius: 8px;
+        padding: 16px;
+        
+        .tecnico-info {
+          h3 {
+            margin: 0 0 8px 0;
+            color: var(--ion-color-primary);
+          }
+          
+          .tecnico-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--ion-color-medium);
+          }
+          
+          .tecnico-satisfaccion {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            
+            ion-icon {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .metricas-globales {
+      .metricas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        
+        .metrica {
+          background: var(--ion-color-light);
+          border-radius: 8px;
+          padding: 16px;
+          text-align: center;
+          
+          h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--ion-color-secondary);
+          }
+          
+          p {
+            margin: 4px 0 0 0;
+            color: var(--ion-color-medium);
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .reporte-clientes {
+    .satisfaccion-global {
+      text-align: center;
+      margin-bottom: 24px;
+      
+      .satisfaccion-estrellas {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        margin-top: 8px;
+        
+        ion-icon {
+          font-size: 1.5rem;
+        }
+        
+        span {
+          margin-left: 8px;
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+      }
+    }
+    
+    .satisfaccion-departamentos {
+      margin-bottom: 24px;
+      
+      .satisfaccion-barras {
+        .satisfaccion-bar {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 8px;
+          
+          .dept-nombre {
+            min-width: 120px;
+            font-size: 0.9rem;
+          }
+          
+          .barra-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            
+            .barra {
+              height: 8px;
+              background: var(--ion-color-warning);
+              border-radius: 4px;
+            }
+            
+            span {
+              font-size: 0.9rem;
+              color: var(--ion-color-medium);
+            }
+          }
+        }
+      }
+    }
+    
+    .comentarios-destacados {
+      ion-item {
+        --background: rgba(var(--ion-color-light-rgb), 0.5);
+        margin-bottom: 8px;
+        border-radius: 8px;
+        
+        ion-avatar {
+          background: var(--ion-color-light);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .comentario-calificacion {
+          display: flex;
+          gap: 2px;
+          margin-top: 4px;
+          
+          ion-icon {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .descargar-reporte {
+    margin-top: 24px;
+  }
+}
+
+.no-reporte {
+  margin-top: 40px;
+  
+  .text-center {
+    text-align: center;
+    
+    ion-icon {
+      margin-bottom: 16px;
+    }
+    
+    h3 {
+      color: var(--ion-color-medium);
+      margin: 16px 0 8px 0;
+    }
+    
+    p {
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filtros-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .metricas-principales {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .tecnicos-podium {
+    grid-template-columns: 1fr !important;
+  }
+}

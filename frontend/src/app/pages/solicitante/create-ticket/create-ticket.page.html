@@ -1,0 +1,167 @@
+<!-- Input oculto para archivos -->
+<input 
+  type="file" 
+  id="fileInput" 
+  multiple 
+  accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+  (change)="onFileSelected($event)"
+  style="display: none;">
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Logo de la empresa -->
+    <ion-buttons slot="start">
+      <ion-button fill="clear">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Sistema de Tickets</ion-title>
+    
+    <!-- Menú de usuario -->
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Nuevo Ticket de Soporte</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <form>
+          <!-- Asunto -->
+          <ion-item>
+            <ion-input 
+              label="Asunto *" 
+              labelPlacement="stacked"
+              [(ngModel)]="ticket.asunto"
+              name="asunto"
+              placeholder="Ingresa el asunto del ticket"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <!-- Descripción -->
+          <ion-item>
+            <ion-textarea 
+              label="Descripción *" 
+              labelPlacement="stacked"
+              [(ngModel)]="ticket.descripcion"
+              name="descripcion"
+              placeholder="Describe detalladamente el problema o solicitud"
+              rows="4"
+              required>
+            </ion-textarea>
+          </ion-item>
+
+          <!-- Departamento -->
+          <ion-item>
+            <ion-select 
+              label="Departamento *" 
+              labelPlacement="stacked"
+              [(ngModel)]="ticket.departamento"
+              name="departamento"
+              placeholder="Selecciona un departamento"
+              required>
+              <ion-select-option 
+                *ngFor="let dept of departamentos" 
+                [value]="dept.nombre">
+                {{ dept.nombre }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Prioridad -->
+          <ion-item>
+            <ion-select 
+              label="Prioridad" 
+              labelPlacement="stacked"
+              [(ngModel)]="ticket.prioridad"
+              name="prioridad">
+              <ion-select-option 
+                *ngFor="let prioridad of prioridades" 
+                [value]="prioridad.valor">
+                {{ prioridad.nombre }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Sección de archivos adjuntos -->
+          <ion-item>
+            <ion-label>
+              <h3>Archivos adjuntos</h3>
+              <p>Máximo {{ MAX_FILES }} archivos - {{ formatFileSize(MAX_TOTAL_SIZE) }} total</p>
+            </ion-label>
+          </ion-item>
+
+          <!-- Botón para adjuntar archivos -->
+          <ion-item button (click)="triggerFileInput()" [disabled]="attachedFiles.length >= MAX_FILES">
+            <ion-icon name="attach-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Adjuntar archivos</h3>
+              <p>JPG, PNG, PDF, DOC, XLS, TXT</p>
+            </ion-label>
+          </ion-item>
+
+          <!-- Barra de progreso del tamaño -->
+          <div class="size-progress" *ngIf="attachedFiles.length > 0">
+            <ion-progress-bar 
+              [value]="getSizePercentage() / 100"
+              [color]="getSizePercentage() > 90 ? 'danger' : getSizePercentage() > 70 ? 'warning' : 'success'">
+            </ion-progress-bar>
+            <ion-text 
+              [color]="getSizePercentage() > 90 ? 'danger' : getSizePercentage() > 70 ? 'warning' : 'medium'">
+              <small>{{ formatFileSize(getTotalSize()) }} / {{ formatFileSize(MAX_TOTAL_SIZE) }}</small>
+            </ion-text>
+          </div>
+
+          <!-- Lista de archivos adjuntos -->
+          <div class="attached-files" *ngIf="attachedFiles.length > 0">
+            <ion-item *ngFor="let file of attachedFiles" class="file-item">
+              <ion-icon name="document-outline" slot="start"></ion-icon>
+              <ion-label>
+                <h3>{{ file.name }}</h3>
+                <p>{{ formatFileSize(file.size) }}</p>
+              </ion-label>
+              <ion-button 
+                slot="end" 
+                fill="clear" 
+                color="danger"
+                (click)="removeFile(file.id)">
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="action-buttons">
+            <ion-button 
+              expand="block" 
+              (click)="crearTicket()" 
+              [disabled]="!isFormValid() || loading">
+              <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
+              {{ loading ? 'Creando...' : 'Crear Ticket' }}
+            </ion-button>
+            
+            <ion-button 
+              expand="block" 
+              fill="outline" 
+              (click)="goBack()"
+              [disabled]="loading">
+              Cancelar
+            </ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

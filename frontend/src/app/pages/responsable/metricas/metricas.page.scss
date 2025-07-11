@@ -1,0 +1,338 @@
+.container {
+  padding: 16px;
+}
+
+.seccion {
+  margin-bottom: 32px;
+  
+  h2 {
+    margin: 0 0 16px 0;
+    color: var(--ion-color-dark);
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+}
+
+// Resumen rápido
+.resumen-rapido {
+  margin-bottom: 24px;
+  
+  .resumen-card {
+    margin: 0;
+    background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+    color: white;
+  }
+  
+  .resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    text-align: center;
+    
+    .resumen-item {
+      .numero-grande {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 8px;
+        
+        &.satisfaccion::after {
+          content: '/5';
+          font-size: 1.2rem;
+          opacity: 0.8;
+        }
+      }
+      
+      .label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+// Estados visuales
+.estados-visual {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  
+  .chart-container {
+    flex-shrink: 0;
+    
+    .donut-chart {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #28a745 0deg 230deg,
+        #007bff 230deg 335deg,
+        #ffc107 335deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      
+      .chart-center {
+        width: 70px;
+        height: 70px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        
+        .total-number {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: var(--ion-color-dark);
+        }
+        
+        .total-label {
+          font-size: 0.7rem;
+          color: var(--ion-color-medium);
+        }
+      }
+    }
+  }
+  
+  .estados-legend {
+    flex: 1;
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      
+      .color-indicator {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+      }
+      
+      .legend-info {
+        .estado-nombre {
+          font-weight: 500;
+          color: var(--ion-color-dark);
+        }
+        
+        .estado-datos {
+          font-size: 0.85rem;
+          color: var(--ion-color-medium);
+        }
+      }
+    }
+  }
+}
+
+// Top técnicos
+.tecnicos-podium {
+  display: grid;
+  gap: 16px;
+  
+  .tecnico-card {
+    margin: 0;
+    
+    &.posicion-1 {
+      border-left: 4px solid var(--ion-color-warning);
+      background: linear-gradient(90deg, rgba(var(--ion-color-warning-rgb), 0.1) 0%, transparent 100%);
+    }
+    
+    &.posicion-2 {
+      border-left: 4px solid var(--ion-color-medium);
+      background: linear-gradient(90deg, rgba(var(--ion-color-medium-rgb), 0.1) 0%, transparent 100%);
+    }
+    
+    &.posicion-3 {
+      border-left: 4px solid var(--ion-color-tertiary);
+      background: linear-gradient(90deg, rgba(var(--ion-color-tertiary-rgb), 0.1) 0%, transparent 100%);
+    }
+    
+    .tecnico-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      .tecnico-info {
+        flex: 1;
+        
+        h3 {
+          margin: 0 0 8px 0;
+          color: var(--ion-color-dark);
+        }
+        
+        .tecnico-stats {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          
+          .tickets {
+            font-size: 0.9rem;
+            color: var(--ion-color-medium);
+          }
+          
+          .satisfaccion-stars {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            
+            ion-icon {
+              font-size: 0.9rem;
+            }
+            
+            .satisfaccion-num {
+              font-size: 0.85rem;
+              color: var(--ion-color-medium);
+              margin-left: 4px;
+            }
+          }
+        }
+      }
+      
+      .posicion-badge {
+        background: var(--ion-color-light);
+        color: var(--ion-color-dark);
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Tipos de solicitudes
+.tipos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  
+  .tipo-card {
+    margin: 0;
+    
+    .tipo-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      .tipo-info {
+        h4 {
+          margin: 0 0 4px 0;
+          color: var(--ion-color-dark);
+        }
+        
+        .tipo-cantidad {
+          font-size: 0.9rem;
+          color: var(--ion-color-medium);
+        }
+      }
+    }
+  }
+}
+
+// Actividad semanal
+.actividad-info {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.semana-visual {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  
+  .dia-card {
+    background: var(--ion-color-light);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    
+    &.no-laboral {
+      background: var(--ion-color-light-shade);
+      opacity: 0.7;
+    }
+    
+    .dia-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 12px;
+      
+      h4 {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--ion-color-dark);
+      }
+    }
+    
+    .dia-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        
+        ion-icon {
+          font-size: 1.2rem;
+        }
+        
+        span {
+          font-weight: bold;
+          font-size: 1.1rem;
+        }
+        
+        small {
+          font-size: 0.7rem;
+          color: var(--ion-color-medium);
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .resumen-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .estados-visual {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+  
+  .tipos-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .semana-visual {
+    grid-template-columns: repeat(4, 1fr);
+    
+    .dia-card:nth-child(n+5) {
+      grid-column: span 1;
+    }
+  }
+  
+  .actividad-info {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .semana-visual {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

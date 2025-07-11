@@ -1,0 +1,124 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Logo de la empresa -->
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/responsable-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Solicitudes Cerradas</ion-title>
+    
+    <!-- Menú de usuario -->
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    
+    <!-- Barra de búsqueda -->
+    <ion-searchbar 
+      [(ngModel)]="searchTerm" 
+      (ionInput)="filtrarSolicitudes()" 
+      placeholder="Buscar por número, asunto, solicitante o departamento..."
+      show-clear-button="focus">
+    </ion-searchbar>
+
+    <!-- Contador de resultados -->
+    <div class="resultados-info">
+      <ion-chip color="success">
+        <ion-label>{{ filteredSolicitudes.length }} solicitudes cerradas</ion-label>
+      </ion-chip>
+    </div>
+
+    <!-- Lista de solicitudes -->
+    <div class="solicitudes-list">
+      <ion-card *ngFor="let solicitud of filteredSolicitudes" (click)="verDetalle(solicitud)" class="solicitud-card">
+        <ion-card-header>
+          <div class="card-header-content">
+            <div class="ticket-info">
+              <ion-card-title>{{ solicitud.numero }}</ion-card-title>
+              <ion-card-subtitle>{{ solicitud.asunto }}</ion-card-subtitle>
+            </div>
+            <div class="badges">
+              <ion-chip [color]="getPrioridadColor(solicitud.prioridad)">
+                <ion-label>{{ solicitud.prioridad }}</ion-label>
+              </ion-chip>
+              <ion-chip color="success">
+                <ion-icon name="checkmark-circle"></ion-icon>
+                <ion-label>Cerrado</ion-label>
+              </ion-chip>
+            </div>
+          </div>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="solicitud-details">
+            <div class="detail-row">
+              <ion-icon name="person" color="medium"></ion-icon>
+              <span><strong>Solicitante:</strong> {{ solicitud.solicitante }}</span>
+            </div>
+            
+            <div class="detail-row">
+              <ion-icon name="business" color="medium"></ion-icon>
+              <span><strong>Departamento:</strong> {{ solicitud.departamento }}</span>
+            </div>
+            
+            <div class="detail-row">
+              <ion-icon name="calendar" color="medium"></ion-icon>
+              <span><strong>Creado:</strong> {{ solicitud.fechaCreacion }}</span>
+            </div>
+            
+            <div class="detail-row">
+              <ion-icon name="checkmark-circle" color="success"></ion-icon>
+              <span><strong>Cerrado:</strong> {{ solicitud.fechaCierre }}</span>
+            </div>
+            
+            <div class="detail-row">
+              <ion-icon name="time" color="primary"></ion-icon>
+              <span><strong>Tiempo resolución:</strong> {{ solicitud.tiempoResolucion }}</span>
+            </div>
+            
+            <div class="detail-row satisfaccion-row">
+              <ion-icon [name]="getSatisfaccionIcon(solicitud.satisfaccion)" [color]="getSatisfaccionColor(solicitud.satisfaccion)"></ion-icon>
+              <span><strong>Satisfacción:</strong> {{ solicitud.satisfaccion }}/5</span>
+              <div class="estrellas">
+                <ion-icon 
+                  *ngFor="let star of [1,2,3,4,5]" 
+                  [name]="star <= solicitud.satisfaccion ? 'star' : 'star-outline'"
+                  [color]="star <= solicitud.satisfaccion ? 'warning' : 'medium'">
+                </ion-icon>
+              </div>
+            </div>
+          </div>
+          
+          <div class="acciones">
+            <ion-button fill="clear" size="small" (click)="verDetalle(solicitud); $event.stopPropagation()">
+              <ion-icon name="eye" slot="start"></ion-icon>
+              Ver Detalle
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Mensaje cuando no hay resultados -->
+    <div *ngIf="filteredSolicitudes.length === 0" class="no-results">
+      <ion-card>
+        <ion-card-content class="text-center">
+          <ion-icon name="search" size="large" color="medium"></ion-icon>
+          <h3>No se encontraron solicitudes</h3>
+          <p>No hay solicitudes cerradas que coincidan con tu búsqueda.</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

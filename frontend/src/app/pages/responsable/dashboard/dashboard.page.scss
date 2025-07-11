@@ -1,0 +1,57 @@
+.dashboard-container {
+  padding: 16px;
+}
+
+.metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metrica-card {
+  margin: 0;
+  
+  ion-card-content {
+    padding: 16px;
+  }
+}
+
+.metrica-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  
+  ion-icon {
+    font-size: 2.5rem;
+    min-width: 40px;
+  }
+}
+
+.metrica-info {
+  h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--ion-color-dark);
+  }
+  
+  p {
+    margin: 4px 0 0 0;
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+  }
+}
+
+.navegacion-section {
+  ion-button {
+    margin: 8px 0;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .metricas-grid {
+    grid-template-columns: 1fr;
+  }
+}

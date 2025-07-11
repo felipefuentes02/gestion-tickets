@@ -1,0 +1,481 @@
+{
+  "hash": "ea3a7380",
+  "configHash": "b8fb4567",
+  "lockfileHash": "a8b6978c",
+  "browserHash": "497d2832",
+  "optimized": {
+    "@angular/common": {
+      "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
+      "file": "@angular_common.js",
+      "fileHash": "a23e1f15",
+      "needsInterop": false
+    },
+    "@angular/common/http": {
+      "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
+      "file": "@angular_common_http.js",
+      "fileHash": "8b01fec1",
+      "needsInterop": false
+    },
+    "@angular/core": {
+      "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
+      "file": "@angular_core.js",
+      "fileHash": "58c19109",
+      "needsInterop": false
+    },
+    "@angular/forms": {
+      "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
+      "file": "@angular_forms.js",
+      "fileHash": "24478aca",
+      "needsInterop": false
+    },
+    "@angular/platform-browser": {
+      "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
+      "file": "@angular_platform-browser.js",
+      "fileHash": "af98b9bc",
+      "needsInterop": false
+    },
+    "@angular/router": {
+      "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
+      "file": "@angular_router.js",
+      "fileHash": "04f237ba",
+      "needsInterop": false
+    },
+    "@ionic/angular": {
+      "src": "../../../../../../node_modules/@ionic/angular/fesm2022/ionic-angular.mjs",
+      "file": "@ionic_angular.js",
+      "fileHash": "d63a7b7f",
+      "needsInterop": false
+    },
+    "@ionic/angular/standalone": {
+      "src": "../../../../../../node_modules/@ionic/angular/fesm2022/ionic-angular-standalone.mjs",
+      "file": "@ionic_angular_standalone.js",
+      "fileHash": "52a7d5ca",
+      "needsInterop": false
+    },
+    "ionicons": {
+      "src": "../../../../../../node_modules/ionicons/dist/index.js",
+      "file": "ionicons.js",
+      "fileHash": "2accd9f1",
+      "needsInterop": false
+    },
+    "ionicons/icons": {
+      "src": "../../../../../../node_modules/ionicons/icons/index.mjs",
+      "file": "ionicons_icons.js",
+      "fileHash": "38e896f5",
+      "needsInterop": false
+    },
+    "rxjs": {
+      "src": "../../../../../../node_modules/rxjs/dist/esm5/index.js",
+      "file": "rxjs.js",
+      "fileHash": "5a793580",
+      "needsInterop": false
+    },
+    "zone.js": {
+      "src": "../../../../../../node_modules/zone.js/fesm2015/zone.js",
+      "file": "zone__js.js",
+      "fileHash": "e74e8ba6",
+      "needsInterop": true
+    },
+    "rxjs/operators": {
+      "src": "../../../../../../node_modules/rxjs/dist/esm5/operators/index.js",
+      "file": "rxjs_operators.js",
+      "fileHash": "9d33f551",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "keyboard-DJSYFZAF": {
+      "file": "keyboard-DJSYFZAF.js"
+    },
+    "index7-C37DZI6N": {
+      "file": "index7-C37DZI6N.js"
+    },
+    "status-tap-7KMPFC3P": {
+      "file": "status-tap-7KMPFC3P.js"
+    },
+    "input-shims-SXSUKIYA": {
+      "file": "input-shims-SXSUKIYA.js"
+    },
+    "focus-visible-XBL42XGV": {
+      "file": "focus-visible-XBL42XGV.js"
+    },
+    "ion-split-pane.entry-ZEEE7HKV": {
+      "file": "ion-split-pane__entry-ZEEE7HKV.js"
+    },
+    "ion-tab-bar_2.entry-JYA7ZO3L": {
+      "file": "ion-tab-bar_2__entry-JYA7ZO3L.js"
+    },
+    "ion-tab_2.entry-7MZBMB2T": {
+      "file": "ion-tab_2__entry-7MZBMB2T.js"
+    },
+    "ion-text.entry-5GOZRSQU": {
+      "file": "ion-text__entry-5GOZRSQU.js"
+    },
+    "ion-textarea.entry-H5AHQD2B": {
+      "file": "ion-textarea__entry-H5AHQD2B.js"
+    },
+    "ion-toast.entry-EN2MR6OB": {
+      "file": "ion-toast__entry-EN2MR6OB.js"
+    },
+    "ion-toggle.entry-SSHLJSG7": {
+      "file": "ion-toggle__entry-SSHLJSG7.js"
+    },
+    "swipe-back-TL5XF5LG": {
+      "file": "swipe-back-TL5XF5LG.js"
+    },
+    "ion-route_4.entry-YQ55YA2Q": {
+      "file": "ion-route_4__entry-YQ55YA2Q.js"
+    },
+    "ion-searchbar.entry-G6QAMNL2": {
+      "file": "ion-searchbar__entry-G6QAMNL2.js"
+    },
+    "ion-segment-content.entry-6AW2AMHV": {
+      "file": "ion-segment-content__entry-6AW2AMHV.js"
+    },
+    "ion-segment-view.entry-UBQ7G6XD": {
+      "file": "ion-segment-view__entry-UBQ7G6XD.js"
+    },
+    "ion-segment_2.entry-EGVZ7AAD": {
+      "file": "ion-segment_2__entry-EGVZ7AAD.js"
+    },
+    "ion-select-modal.entry-HCZFCG4S": {
+      "file": "ion-select-modal__entry-HCZFCG4S.js"
+    },
+    "ion-select_3.entry-YWBADUY2": {
+      "file": "ion-select_3__entry-YWBADUY2.js"
+    },
+    "ion-spinner.entry-TLYJBESV": {
+      "file": "ion-spinner__entry-TLYJBESV.js"
+    },
+    "ion-picker.entry-KHTEQB2D": {
+      "file": "ion-picker__entry-KHTEQB2D.js"
+    },
+    "ion-popover.entry-3ZW5RHSN": {
+      "file": "ion-popover__entry-3ZW5RHSN.js"
+    },
+    "ion-progress-bar.entry-3BTIG47K": {
+      "file": "ion-progress-bar__entry-3BTIG47K.js"
+    },
+    "ion-radio_2.entry-XHKYCRFZ": {
+      "file": "ion-radio_2__entry-XHKYCRFZ.js"
+    },
+    "chunk-4YTI4ER5": {
+      "file": "chunk-4YTI4ER5.js"
+    },
+    "ion-range.entry-ORNZXLDG": {
+      "file": "ion-range__entry-ORNZXLDG.js"
+    },
+    "ion-refresher_2.entry-LZWNAA3N": {
+      "file": "ion-refresher_2__entry-LZWNAA3N.js"
+    },
+    "chunk-EKTWLTWC": {
+      "file": "chunk-EKTWLTWC.js"
+    },
+    "ion-reorder_2.entry-LC643EZU": {
+      "file": "ion-reorder_2__entry-LC643EZU.js"
+    },
+    "ion-ripple-effect.entry-RBV32VTZ": {
+      "file": "ion-ripple-effect__entry-RBV32VTZ.js"
+    },
+    "ion-item-option_3.entry-EMZMBSER": {
+      "file": "ion-item-option_3__entry-EMZMBSER.js"
+    },
+    "chunk-BW7P24PA": {
+      "file": "chunk-BW7P24PA.js"
+    },
+    "ion-item_8.entry-XW57XMBX": {
+      "file": "ion-item_8__entry-XW57XMBX.js"
+    },
+    "ion-loading.entry-QP3BXATZ": {
+      "file": "ion-loading__entry-QP3BXATZ.js"
+    },
+    "ion-menu_3.entry-IZV3DNAA": {
+      "file": "ion-menu_3__entry-IZV3DNAA.js"
+    },
+    "ion-modal.entry-H2XIQLA5": {
+      "file": "ion-modal__entry-H2XIQLA5.js"
+    },
+    "ion-nav_2.entry-P4PY6QBA": {
+      "file": "ion-nav_2__entry-P4PY6QBA.js"
+    },
+    "ion-picker-column-option.entry-NYGUG5RH": {
+      "file": "ion-picker-column-option__entry-NYGUG5RH.js"
+    },
+    "ion-picker-column.entry-UFZAUCB4": {
+      "file": "ion-picker-column__entry-UFZAUCB4.js"
+    },
+    "ion-datetime-button.entry-DOLXZ5IV": {
+      "file": "ion-datetime-button__entry-DOLXZ5IV.js"
+    },
+    "ion-datetime_3.entry-BNL6OVW7": {
+      "file": "ion-datetime_3__entry-BNL6OVW7.js"
+    },
+    "chunk-JGB4GNTP": {
+      "file": "chunk-JGB4GNTP.js"
+    },
+    "ion-fab_3.entry-GGIMP2QQ": {
+      "file": "ion-fab_3__entry-GGIMP2QQ.js"
+    },
+    "ion-img.entry-GI5UVPTM": {
+      "file": "ion-img__entry-GI5UVPTM.js"
+    },
+    "ion-infinite-scroll_2.entry-FL3LREVQ": {
+      "file": "ion-infinite-scroll_2__entry-FL3LREVQ.js"
+    },
+    "ion-input-otp.entry-DCVEERMJ": {
+      "file": "ion-input-otp__entry-DCVEERMJ.js"
+    },
+    "ion-input-password-toggle.entry-J2YF57YG": {
+      "file": "ion-input-password-toggle__entry-J2YF57YG.js"
+    },
+    "ion-input.entry-GHMHOURQ": {
+      "file": "ion-input__entry-GHMHOURQ.js"
+    },
+    "chunk-HJIZ6BHW": {
+      "file": "chunk-HJIZ6BHW.js"
+    },
+    "chunk-EHNPQLCU": {
+      "file": "chunk-EHNPQLCU.js"
+    },
+    "ion-back-button.entry-DSXYIZGL": {
+      "file": "ion-back-button__entry-DSXYIZGL.js"
+    },
+    "ion-backdrop.entry-7EAY4YSZ": {
+      "file": "ion-backdrop__entry-7EAY4YSZ.js"
+    },
+    "ion-breadcrumb_2.entry-CNT3W5SE": {
+      "file": "ion-breadcrumb_2__entry-CNT3W5SE.js"
+    },
+    "ion-button_2.entry-XCBNBVWB": {
+      "file": "ion-button_2__entry-XCBNBVWB.js"
+    },
+    "ion-card_5.entry-337WWGKR": {
+      "file": "ion-card_5__entry-337WWGKR.js"
+    },
+    "ion-checkbox.entry-X6ASDUI5": {
+      "file": "ion-checkbox__entry-X6ASDUI5.js"
+    },
+    "ion-chip.entry-MLBXSXSX": {
+      "file": "ion-chip__entry-MLBXSXSX.js"
+    },
+    "ion-col_3.entry-M45MZMB2": {
+      "file": "ion-col_3__entry-M45MZMB2.js"
+    },
+    "index-CWbP1eJz-I4N7S32D": {
+      "file": "index-CWbP1eJz-I4N7S32D.js"
+    },
+    "status-tap-7t9T91bG-QK5DVABC": {
+      "file": "status-tap-7t9T91bG-QK5DVABC.js"
+    },
+    "input-shims-C3lNp93k-RJPMOPRL": {
+      "file": "input-shims-C3lNp93k-RJPMOPRL.js"
+    },
+    "keyboard-ywgs5efA-XYMYC7T4": {
+      "file": "keyboard-ywgs5efA-XYMYC7T4.js"
+    },
+    "chunk-QGLHSLIO": {
+      "file": "chunk-QGLHSLIO.js"
+    },
+    "focus-visible-BmVRXR1y-ZTBN6E5W": {
+      "file": "focus-visible-BmVRXR1y-ZTBN6E5W.js"
+    },
+    "chunk-QRN5AHKQ": {
+      "file": "chunk-QRN5AHKQ.js"
+    },
+    "swipe-back-VdaUzLWy-OI7G2SJ4": {
+      "file": "swipe-back-VdaUzLWy-OI7G2SJ4.js"
+    },
+    "ion-app_8.entry-IW7QK2YW": {
+      "file": "ion-app_8__entry-IW7QK2YW.js"
+    },
+    "chunk-ACTGXBFA": {
+      "file": "chunk-ACTGXBFA.js"
+    },
+    "chunk-3HOY3HBH": {
+      "file": "chunk-3HOY3HBH.js"
+    },
+    "chunk-UDOB7BMP": {
+      "file": "chunk-UDOB7BMP.js"
+    },
+    "chunk-5NKZUR6M": {
+      "file": "chunk-5NKZUR6M.js"
+    },
+    "ion-avatar_3.entry-FZKFKQDC": {
+      "file": "ion-avatar_3__entry-FZKFKQDC.js"
+    },
+    "hardware-back-button-ONRIE2X4": {
+      "file": "hardware-back-button-ONRIE2X4.js"
+    },
+    "ion-accordion_2.entry-Q6IYOWLH": {
+      "file": "ion-accordion_2__entry-Q6IYOWLH.js"
+    },
+    "chunk-VZVUU2IO": {
+      "file": "chunk-VZVUU2IO.js"
+    },
+    "index-CfgBF1SE-YQMITAOU": {
+      "file": "index-CfgBF1SE-YQMITAOU.js"
+    },
+    "hardware-back-button-DcH0BbDp-HQWTQIXN": {
+      "file": "hardware-back-button-DcH0BbDp-HQWTQIXN.js"
+    },
+    "ion-action-sheet.entry-CC4Y6KSE": {
+      "file": "ion-action-sheet__entry-CC4Y6KSE.js"
+    },
+    "ion-alert.entry-4H7QVI5N": {
+      "file": "ion-alert__entry-4H7QVI5N.js"
+    },
+    "chunk-6BYT5AVE": {
+      "file": "chunk-6BYT5AVE.js"
+    },
+    "chunk-32GL4UXS": {
+      "file": "chunk-32GL4UXS.js"
+    },
+    "chunk-V3DEFQ3K": {
+      "file": "chunk-V3DEFQ3K.js"
+    },
+    "chunk-KH3VUFSP": {
+      "file": "chunk-KH3VUFSP.js"
+    },
+    "ios.transition-BmXtMRXZ-D2DMMA7L": {
+      "file": "ios__transition-BmXtMRXZ-D2DMMA7L.js"
+    },
+    "md.transition-CLI683c7-OCJP3QM3": {
+      "file": "md__transition-CLI683c7-OCJP3QM3.js"
+    },
+    "chunk-WLJCR3YJ": {
+      "file": "chunk-WLJCR3YJ.js"
+    },
+    "chunk-34QX6F67": {
+      "file": "chunk-34QX6F67.js"
+    },
+    "chunk-CEVJK34R": {
+      "file": "chunk-CEVJK34R.js"
+    },
+    "chunk-3UCM77VQ": {
+      "file": "chunk-3UCM77VQ.js"
+    },
+    "chunk-Z26ZIQGJ": {
+      "file": "chunk-Z26ZIQGJ.js"
+    },
+    "chunk-YHTFT7Q3": {
+      "file": "chunk-YHTFT7Q3.js"
+    },
+    "chunk-Z3OEOVFM": {
+      "file": "chunk-Z3OEOVFM.js"
+    },
+    "chunk-QA2SYHF5": {
+      "file": "chunk-QA2SYHF5.js"
+    },
+    "chunk-2GFQNEAQ": {
+      "file": "chunk-2GFQNEAQ.js"
+    },
+    "chunk-XNLSTGWM": {
+      "file": "chunk-XNLSTGWM.js"
+    },
+    "chunk-55I7DKZI": {
+      "file": "chunk-55I7DKZI.js"
+    },
+    "chunk-XBQX5DZA": {
+      "file": "chunk-XBQX5DZA.js"
+    },
+    "chunk-U6DMPR74": {
+      "file": "chunk-U6DMPR74.js"
+    },
+    "chunk-WIPWHQEU": {
+      "file": "chunk-WIPWHQEU.js"
+    },
+    "chunk-LCMILTBF": {
+      "file": "chunk-LCMILTBF.js"
+    },
+    "chunk-CVGEUDK2": {
+      "file": "chunk-CVGEUDK2.js"
+    },
+    "chunk-G5UZVNUA": {
+      "file": "chunk-G5UZVNUA.js"
+    },
+    "chunk-IKS2SDKY": {
+      "file": "chunk-IKS2SDKY.js"
+    },
+    "chunk-D6MKN2U2": {
+      "file": "chunk-D6MKN2U2.js"
+    },
+    "chunk-L6ISKHKK": {
+      "file": "chunk-L6ISKHKK.js"
+    },
+    "chunk-IUXA2G6D": {
+      "file": "chunk-IUXA2G6D.js"
+    },
+    "chunk-WX7RBSPP": {
+      "file": "chunk-WX7RBSPP.js"
+    },
+    "chunk-EODYS5EQ": {
+      "file": "chunk-EODYS5EQ.js"
+    },
+    "chunk-DAAISMZ6": {
+      "file": "chunk-DAAISMZ6.js"
+    },
+    "ios.transition-4L3T65YY": {
+      "file": "ios__transition-4L3T65YY.js"
+    },
+    "chunk-KTD2JUNU": {
+      "file": "chunk-KTD2JUNU.js"
+    },
+    "md.transition-BRAYUJ2B": {
+      "file": "md__transition-BRAYUJ2B.js"
+    },
+    "chunk-ZMP45DRO": {
+      "file": "chunk-ZMP45DRO.js"
+    },
+    "chunk-ZR5C6QZE": {
+      "file": "chunk-ZR5C6QZE.js"
+    },
+    "chunk-46J5DPY5": {
+      "file": "chunk-46J5DPY5.js"
+    },
+    "chunk-4554YRK6": {
+      "file": "chunk-4554YRK6.js"
+    },
+    "chunk-QEE7QVES": {
+      "file": "chunk-QEE7QVES.js"
+    },
+    "chunk-2H3NLAAY": {
+      "file": "chunk-2H3NLAAY.js"
+    },
+    "index3-WDJJIG5O": {
+      "file": "index3-WDJJIG5O.js"
+    },
+    "chunk-6U2AQA2C": {
+      "file": "chunk-6U2AQA2C.js"
+    },
+    "chunk-GXSMLZBO": {
+      "file": "chunk-GXSMLZBO.js"
+    },
+    "chunk-DNYKBNKA": {
+      "file": "chunk-DNYKBNKA.js"
+    },
+    "chunk-4HJXTDRY": {
+      "file": "chunk-4HJXTDRY.js"
+    },
+    "chunk-LBYYU7AH": {
+      "file": "chunk-LBYYU7AH.js"
+    },
+    "chunk-5KK3G4LL": {
+      "file": "chunk-5KK3G4LL.js"
+    },
+    "chunk-KSUPOHDI": {
+      "file": "chunk-KSUPOHDI.js"
+    },
+    "chunk-2DP3BPER": {
+      "file": "chunk-2DP3BPER.js"
+    },
+    "chunk-XWRL2WMY": {
+      "file": "chunk-XWRL2WMY.js"
+    },
+    "chunk-I6XZA7ZE": {
+      "file": "chunk-I6XZA7ZE.js"
+    },
+    "chunk-QHQP2P2Z": {
+      "file": "chunk-QHQP2P2Z.js"
+    }
+  }
+}

@@ -1,0 +1,177 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/responsable-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Métricas - {{ departamentoUsuario }}</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    
+    <!-- Resumen rápido -->
+    <div class="resumen-rapido">
+      <ion-card class="resumen-card">
+        <ion-card-content>
+          <div class="resumen-grid">
+            <div class="resumen-item">
+              <div class="numero-grande">{{ metricas.totalTickets }}</div>
+              <div class="label">Total Tickets</div>
+            </div>
+            <div class="resumen-item">
+              <div class="numero-grande satisfaccion" [style.color]="getSatisfaccionColor(metricas.satisfaccionPromedio) === 'success' ? 'var(--ion-color-success)' : 'var(--ion-color-warning)'">
+                {{ metricas.satisfaccionPromedio }}
+              </div>
+              <div class="label">Satisfacción</div>
+            </div>
+            <div class="resumen-item">
+              <div class="numero-grande sla" [style.color]="getSLAColor(metricas.porcentajeCumplimientoSLA) === 'success' ? 'var(--ion-color-success)' : 'var(--ion-color-warning)'">
+                {{ metricas.porcentajeCumplimientoSLA }}%
+              </div>
+              <div class="label">SLA</div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Estados de tickets - Visual circular -->
+    <div class="seccion">
+      <h2>Estado Actual de Tickets</h2>
+      <ion-card>
+        <ion-card-content>
+          <div class="estados-visual">
+            <div class="chart-container">
+              <div class="donut-chart">
+                <div class="chart-center">
+                  <div class="total-number">{{ metricas.totalTickets }}</div>
+                  <div class="total-label">Total</div>
+                </div>
+              </div>
+            </div>
+            <div class="estados-legend">
+              <div *ngFor="let estado of estadosChart" class="legend-item">
+                <div class="color-indicator" [style.background-color]="estado.color"></div>
+                <div class="legend-info">
+                  <div class="estado-nombre">{{ estado.estado }}</div>
+                  <div class="estado-datos">{{ estado.cantidad }} ({{ estado.porcentaje }}%)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Top técnicos -->
+    <div class="seccion">
+      <h2>Top Técnicos del Mes</h2>
+      <div class="tecnicos-podium">
+        <ion-card *ngFor="let tecnico of topTecnicos" class="tecnico-card" [class]="'posicion-' + tecnico.posicion">
+          <ion-card-content>
+            <div class="tecnico-content">
+              <ion-icon [name]="getPosicionIcon(tecnico.posicion)" [color]="getPosicionColor(tecnico.posicion)" size="large"></ion-icon>
+              <div class="tecnico-info">
+                <h3>{{ tecnico.nombre }}</h3>
+                <div class="tecnico-stats">
+                  <span class="tickets">{{ tecnico.tickets }} tickets</span>
+                  <div class="satisfaccion-stars">
+                    <ion-icon 
+                      *ngFor="let star of [1,2,3,4,5]" 
+                      [name]="star <= tecnico.satisfaccion ? 'star' : 'star-outline'"
+                      color="warning">
+                    </ion-icon>
+                    <span class="satisfaccion-num">{{ tecnico.satisfaccion }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="posicion-badge">
+                #{{ tecnico.posicion }}
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Tipos de solicitudes - Cards visuales -->
+    <div class="seccion">
+      <h2>Tipos de Solicitudes</h2>
+      <div class="tipos-grid">
+        <ion-card *ngFor="let tipo of tiposSolicitudes" class="tipo-card">
+          <ion-card-content>
+            <div class="tipo-content">
+              <ion-icon [name]="tipo.icono" [color]="tipo.color" size="large"></ion-icon>
+              <div class="tipo-info">
+                <h4>{{ tipo.tipo }}</h4>
+                <div class="tipo-cantidad">{{ tipo.cantidad }} tickets</div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Actividad semanal -->
+    <div class="seccion">
+      <h2>Actividad Semanal</h2>
+      <ion-card>
+        <ion-card-content>
+          <div class="actividad-info">
+            <ion-chip color="primary">
+              <ion-icon name="business-outline"></ion-icon>
+              <ion-label>Lun-Vie: Horario laboral</ion-label>
+            </ion-chip>
+            <ion-chip color="medium">
+              <ion-icon name="home-outline"></ion-icon>
+              <ion-label>Sáb-Dom: Solo recepción</ion-label>
+            </ion-chip>
+          </div>
+          
+          <div class="semana-visual">
+            <div *ngFor="let dia of tendenciaSemanal" class="dia-card" [class.no-laboral]="!dia.esLaboral">
+              <div class="dia-header">
+                <h4>{{ dia.dia }}</h4>
+                <ion-icon *ngIf="!dia.esLaboral" name="moon" color="medium"></ion-icon>
+                <ion-icon *ngIf="dia.esLaboral" name="sunny" color="warning"></ion-icon>
+              </div>
+              
+              <div class="dia-stats">
+                <div class="stat-item recibidos">
+                  <ion-icon name="mail" color="primary"></ion-icon>
+                  <span>{{ dia.creados }}</span>
+                  <small>Recibidos</small>
+                </div>
+                
+                <div class="stat-item procesados" *ngIf="dia.esLaboral">
+                  <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                  <span>{{ dia.procesados }}</span>
+                  <small>Procesados</small>
+                </div>
+                
+                <div class="stat-item pendientes" *ngIf="!dia.esLaboral && dia.creados > 0">
+                  <ion-icon name="time" color="warning"></ion-icon>
+                  <span>{{ dia.creados }}</span>
+                  <small>Pendientes</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

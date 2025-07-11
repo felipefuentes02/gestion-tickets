@@ -1,0 +1,86 @@
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-container">
+    <!-- Logo de la empresa -->
+    <div class="logo-container">
+      <img src="assets/logo-empresa.png" alt="Logo Empresa" class="company-logo">
+    </div>
+
+    <!-- Título -->
+    <div class="title-container">
+      <h1>Sistema de Gestión de Tickets</h1>
+      <p>Ingresa credenciales para acceder</p>
+    </div>
+
+    <!-- Formulario de login -->
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+      <ion-item class="login-item">
+        <ion-input 
+          label="Correo Electrónico"
+          labelPlacement="stacked"
+          type="email" 
+          formControlName="correo"
+          placeholder="usuario@empresa.com">
+        </ion-input>
+      </ion-item>
+      <div class="error-message" *ngIf="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
+        <span *ngIf="loginForm.get('correo')?.errors?.['required']">El correo es requerido</span>
+        <span *ngIf="loginForm.get('correo')?.errors?.['email']">Ingresa un correo válido</span>
+      </div>
+
+      <ion-item class="login-item">
+        <ion-input 
+          label="Contraseña"
+          labelPlacement="stacked"
+          [type]="showPassword ? 'text' : 'password'" 
+          formControlName="contrasena"
+          placeholder="Ingresa tu contraseña">
+        </ion-input>
+        <ion-button 
+          fill="clear" 
+          slot="end" 
+          (click)="togglePasswordVisibility()">
+          <ion-icon [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <div class="error-message" *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
+        <span *ngIf="loginForm.get('contrasena')?.errors?.['required']">La contraseña es requerida</span>
+      </div>
+
+      <!-- Mensaje de error general -->
+      <div class="error-message general-error" *ngIf="errorMessage">
+        <ion-icon name="alert-circle"></ion-icon>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Botón de login -->
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        [disabled]="loginForm.invalid || isLoading"
+        class="login-button">
+        <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+        <span *ngIf="!isLoading">Iniciar Sesión</span>
+      </ion-button>
+      
+      <!-- NUEVA SECCIÓN: Enlace para recuperar contraseña -->
+      <div class="forgot-password-section">
+        <ion-button 
+          fill="clear" 
+          size="small" 
+          (click)="irARecuperarContrasena()"
+          class="forgot-password-link">
+          <ion-icon name="help-circle" slot="start"></ion-icon>
+          ¿Olvidaste tu contraseña?
+        </ion-button>
+      </div>
+    </form>
+
+    <!-- Credenciales de prueba -->
+    <div class="test-credentials">
+      <h3>Credenciales de prueba:</h3>
+      <p><strong>Admin:</strong> adminarrobaempresa.com / 123456</p>
+      <p><strong>Responsable:</strong> responsablearrobaempresa.com / 123456</p>
+      <p><strong>Cliente:</strong> clientearrobaempresa.com / 123456</p>
+    </div>
+  </div>
+</ion-content>

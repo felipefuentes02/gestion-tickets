@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Logo de la empresa -->
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/home">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Detalle del Ticket</ion-title>
+    
+    <!-- Menú de usuario -->
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Cargando ticket...</p>
+  </div>
+
+  <!-- Ticket Detail -->
+  <div *ngIf="!loading && ticket">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{ ticket.numeroTicket || 'Ticket #' + ticket.id }}
+          <ion-badge 
+            [color]="getStatusColor(ticket.estado?.nombre || 'nuevo')"
+            style="margin-left: 8px;">
+            {{ ticket.estado?.nombre || 'Nuevo' }}
+          </ion-badge>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>{{ ticket.asunto }}</h2>
+        <p>{{ ticket.descripcion }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Información del Ticket</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label>
+            <h3>Solicitante</h3>
+            <p>{{ ticket.solicitante?.primerNombre }} {{ ticket.solicitante?.primerApellido }}</p>
+            <p>{{ ticket.solicitante?.correo }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Departamento</h3>
+            <p>{{ ticket.departamento?.nombre }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Prioridad</h3>
+            <p>{{ ticket.prioridad?.nombre }} (Nivel {{ ticket.prioridad?.nivel }})</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Fecha de Creación</h3>
+            <p>{{ formatDate(ticket.createdAt) }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="!loading && !ticket" class="error-container">
+    <h2>Ticket no encontrado</h2>
+    <p>El ticket solicitado no existe o no se pudo cargar.</p>
+    <ion-button (click)="goBack()" color="primary">
+      Volver a Tickets
+    </ion-button>
+  </div>
+</ion-content>

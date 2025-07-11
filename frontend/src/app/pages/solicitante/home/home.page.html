@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- Logo de la empresa -->
+    <ion-buttons slot="start">
+      <ion-button fill="clear">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Sistema de Tickets</ion-title>
+    
+    <!-- Menú de usuario -->
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Sistema de Tickets</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Bienvenido al Sistema de Gestión de Tickets</ion-card-title>
+        <ion-card-subtitle>Selecciona una opción para continuar</ion-card-subtitle>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <ion-button expand="block" fill="solid" color="primary" routerLink="/create-ticket">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Crear Nueva Solicitud
+        </ion-button>
+        
+        <ion-button expand="block" fill="outline" color="secondary" routerLink="/tickets">
+          <ion-icon name="list" slot="start"></ion-icon>
+          Mis Solicitudes
+        </ion-button>
+        
+        <ion-button expand="block" fill="outline" color="tertiary" routerLink="/solicitudes-cc">
+          <ion-icon name="mail" slot="start"></ion-icon>
+          Solicitudes en CC
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

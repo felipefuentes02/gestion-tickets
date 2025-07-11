@@ -1,0 +1,348 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" routerLink="/admin-dashboard">
+        <img src="assets/logo-empresa.png" alt="Logo Empresa" style="height: 32px; width: auto;">
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>Gestión de Usuarios</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="mostrarMenuUsuario($event)">
+        <ion-icon name="person-circle" slot="start"></ion-icon>
+        {{ userService.nombreUsuario }}
+        <ion-icon name="chevron-down" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+
+    <!-- VISTA LISTA DE USUARIOS -->
+    <div *ngIf="vistaActual === 'lista'">
+      
+      <!-- Header con botón crear -->
+      <div class="header-section">
+        <div class="header-info">
+          <h1>Gestión de Usuarios</h1>
+          <p>Administra todos los usuarios del sistema</p>
+        </div>
+        <ion-button (click)="cambiarVista('crear')" color="primary">
+          <ion-icon name="person-add" slot="start"></ion-icon>
+          Crear Usuario
+        </ion-button>
+      </div>
+
+      <!-- Filtros -->
+      <ion-card class="filtros-card">
+        <ion-card-content>
+          <div class="filtros-grid">
+            <ion-item>
+              <ion-input 
+                label="Buscar usuario" 
+                labelPlacement="stacked"
+                placeholder="Nombre, apellido o email"
+                [(ngModel)]="filtroTexto"
+                clearInput="true">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-select 
+                label="Departamento" 
+                labelPlacement="stacked"
+                placeholder="Todos los departamentos"
+                [(ngModel)]="filtroDepartamento">
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option *ngFor="let dept of departamentos" [value]="dept.nombre">
+                  {{ dept.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select 
+                label="Rol" 
+                labelPlacement="stacked"
+                placeholder="Todos los roles"
+                [(ngModel)]="filtroRol">
+                <ion-select-option value="">Todos</ion-select-option>
+                <ion-select-option *ngFor="let rol of roles" [value]="rol.nombre">
+                  {{ rol.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <div class="filtros-acciones">
+              <ion-button fill="clear" (click)="limpiarFiltros()">
+                <ion-icon name="refresh" slot="start"></ion-icon>
+                Limpiar
+              </ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Lista de usuarios -->
+      <div class="usuarios-grid">
+        <ion-card *ngFor="let usuario of usuariosFiltrados" class="usuario-card" [class.inactivo]="!usuario.activo">
+          <ion-card-header>
+            <div class="usuario-header">
+              <div class="usuario-info">
+                <ion-card-title>{{ getNombreCompleto(usuario) }}</ion-card-title>
+                <ion-card-subtitle>{{ usuario.correo }}</ion-card-subtitle>
+              </div>
+              <div class="usuario-estado">
+                <ion-chip [color]="usuario.activo ? 'success' : 'danger'">
+                  <ion-label>{{ usuario.activo ? 'Activo' : 'Inactivo' }}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div class="usuario-detalles">
+              <div class="detalle-row">
+                <ion-icon name="business" color="primary"></ion-icon>
+                <span>{{ usuario.departamento || 'Sin departamento asignado' }}</span>
+              </div>
+              <div class="detalle-row">
+                <ion-icon name="shield-checkmark" color="secondary"></ion-icon>
+                <span>{{ usuario.rol }}</span>
+              </div>
+              <div class="detalle-row">
+                <ion-icon name="globe" color="tertiary"></ion-icon>
+                <span>{{ usuario.esInterno ? 'Usuario Interno' : 'Usuario Externo' }}</span>
+              </div>
+              <div class="detalle-row">
+                <ion-icon name="time" color="medium"></ion-icon>
+                <span>Último acceso: {{ usuario.ultimoAcceso }}</span>
+              </div>
+            </div>
+
+            <div class="usuario-acciones">
+              <ion-button fill="clear" size="small" (click)="editarUsuario(usuario)">
+                <ion-icon name="create" slot="start"></ion-icon>
+                Editar
+              </ion-button>
+              
+              <ion-button fill="clear" size="small" [color]="usuario.activo ? 'warning' : 'success'" 
+                         (click)="cambiarEstadoUsuario(usuario)">
+                <ion-icon [name]="usuario.activo ? 'pause' : 'play'" slot="start"></ion-icon>
+                {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+              </ion-button>
+              
+              <ion-button fill="clear" size="small" color="danger" (click)="eliminarUsuario(usuario)">
+                <ion-icon name="trash" slot="start"></ion-icon>
+                Eliminar
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Mensaje si no hay usuarios -->
+      <div *ngIf="usuariosFiltrados.length === 0" class="no-usuarios">
+        <ion-card>
+          <ion-card-content class="text-center">
+            <ion-icon name="people" size="large" color="medium"></ion-icon>
+            <h3>No se encontraron usuarios</h3>
+            <p>Intenta ajustar los filtros de búsqueda</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- VISTA CREAR/EDITAR USUARIO -->
+    <div *ngIf="vistaActual === 'crear' || vistaActual === 'editar'">
+      
+      <!-- Header del formulario -->
+      <div class="header-section">
+        <div class="header-info">
+          <h1>{{ vistaActual === 'crear' ? 'Crear Nuevo Usuario' : 'Editar Usuario' }}</h1>
+          <p>{{ vistaActual === 'crear' ? 'Completa la información del nuevo usuario' : 'Modifica la información del usuario' }}</p>
+        </div>
+        <ion-button fill="outline" (click)="cambiarVista('lista')">
+          <ion-icon name="arrow-back" slot="start"></ion-icon>
+          Volver a Lista
+        </ion-button>
+      </div>
+
+      <!-- Formulario -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Información Personal</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="form-grid">
+            <ion-item>
+              <ion-input 
+                label="Primer Nombre *" 
+                labelPlacement="stacked"
+                placeholder="Ingresa el primer nombre"
+                [(ngModel)]="nuevoUsuario.primerNombre"
+                required>
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input 
+                label="Segundo Nombre" 
+                labelPlacement="stacked"
+                placeholder="Ingresa el segundo nombre (opcional)"
+                [(ngModel)]="nuevoUsuario.segundoNombre">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input 
+                label="Primer Apellido *" 
+                labelPlacement="stacked"
+                placeholder="Ingresa el primer apellido"
+                [(ngModel)]="nuevoUsuario.primerApellido"
+                required>
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input 
+                label="Segundo Apellido *" 
+                labelPlacement="stacked"
+                placeholder="Ingresa el segundo apellido"
+                [(ngModel)]="nuevoUsuario.segundoApellido"
+                required>
+              </ion-input>
+            </ion-item>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Información de Acceso</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="form-grid">
+            <ion-item>
+              <ion-input 
+                label="Correo Electrónico *" 
+                labelPlacement="stacked"
+                placeholder="usuario@empresa.com"
+                type="email"
+                [(ngModel)]="nuevoUsuario.correo"
+                required>
+              </ion-input>
+            </ion-item>
+
+            <ion-item *ngIf="vistaActual === 'crear'">
+              <ion-input 
+                label="Contraseña Hash *" 
+                labelPlacement="stacked"
+                placeholder="Ingresa la contraseña hash"
+                type="password"
+                [(ngModel)]="nuevoUsuario.password"
+                required>
+              </ion-input>
+            </ion-item>
+
+            <ion-item *ngIf="vistaActual === 'crear'">
+              <ion-input 
+                label="Confirmar Contraseña Hash *" 
+                labelPlacement="stacked"
+                placeholder="Confirma la contraseña hash"
+                type="password"
+                [(ngModel)]="nuevoUsuario.confirmPassword"
+                required>
+              </ion-input>
+            </ion-item>
+
+            <ion-item *ngIf="vistaActual === 'editar'">
+              <ion-input 
+                label="Nueva Contraseña Hash" 
+                labelPlacement="stacked"
+                placeholder="Dejar vacío para mantener actual"
+                type="password"
+                [(ngModel)]="nuevoUsuario.password">
+              </ion-input>
+            </ion-item>
+
+            <ion-item *ngIf="vistaActual === 'editar' && nuevoUsuario.password">
+              <ion-input 
+                label="Confirmar Nueva Contraseña Hash" 
+                labelPlacement="stacked"
+                placeholder="Confirma la nueva contraseña hash"
+                type="password"
+                [(ngModel)]="nuevoUsuario.confirmPassword">
+              </ion-input>
+            </ion-item>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Información Organizacional</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="form-grid">
+            <ion-item>
+              <ion-select 
+                label="Rol *" 
+                labelPlacement="stacked"
+                placeholder="Selecciona el rol"
+                [(ngModel)]="nuevoUsuario.idRol"
+                required>
+                <ion-select-option *ngFor="let rol of roles" [value]="rol.id.toString()">
+                  {{ rol.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-checkbox [(ngModel)]="nuevoUsuario.esInterno" (ionChange)="onTipoUsuarioChange()"></ion-checkbox>
+              <ion-label class="ion-margin-start">Usuario Interno</ion-label>
+            </ion-item>
+
+            <ion-item *ngIf="nuevoUsuario.esInterno">
+              <ion-select 
+                label="Departamento *" 
+                labelPlacement="stacked"
+                placeholder="Selecciona el departamento"
+                [(ngModel)]="nuevoUsuario.idDepartamento"
+                required>
+                <ion-select-option *ngFor="let dept of departamentos" [value]="dept.id.toString()">
+                  {{ dept.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="!nuevoUsuario.esInterno">
+              <ion-note color="medium">
+                <ion-icon name="information-circle" slot="start"></ion-icon>
+                Los usuarios externos no requieren departamento asignado
+              </ion-note>
+            </ion-item>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botones del formulario -->
+      <div class="form-actions">
+        <ion-button expand="block" color="medium" fill="outline" (click)="cambiarVista('lista')">
+          <ion-icon name="close" slot="start"></ion-icon>
+          Cancelar
+        </ion-button>
+        
+        <ion-button expand="block" color="primary" 
+                   (click)="vistaActual === 'crear' ? crearUsuario() : actualizarUsuario()">
+          <ion-icon [name]="vistaActual === 'crear' ? 'person-add' : 'checkmark'" slot="start"></ion-icon>
+          {{ vistaActual === 'crear' ? 'Crear Usuario' : 'Actualizar Usuario' }}
+        </ion-button>
+      </div>
+    </div>
+
+  </div>
+</ion-content>
